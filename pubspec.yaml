@@ -1,0 +1,33 @@
+name: charum
+description: "A new Flutter project."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_native_splash: ^2.4.0
+  introduction_screen: ^3.1.12
+  sign_in_button: ^3.2.0
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo/
+    - assets/welcome/
+    - assets/social-media-logo/
+
+flutter_native_splash:
+  image: assets/logo/charum-logo.png
+  color: "#178066"
+  android: true
+  ios: true
