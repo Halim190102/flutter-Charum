@@ -35,38 +35,11 @@ class _MenuState extends State<Menu> {
   }
 
   void navigationTapped(int page) {
-    pageController.jumpToPage(page);
-  }
-
-  void navigateToPage(BuildContext context, int page) {
-    switch (page) {
-      case 0:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Home()),
-        );
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Home1()),
-        );
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Home2()),
-        );
-        break;
-      case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Home3()),
-        );
-        break;
-      default:
-        break;
-    }
+    pageController.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
   }
 
   @override
@@ -77,12 +50,7 @@ class _MenuState extends State<Menu> {
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           onPageChanged: onPageChanged,
-          children: [
-            const Home(),
-            const Home1(),
-            const Home2(),
-            const Home3(),
-          ],
+          children: menu,
         ),
       ),
       bottomNavigationBar: SizedBox(
@@ -91,11 +59,7 @@ class _MenuState extends State<Menu> {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: greenCharum,
           unselectedItemColor: Colors.grey,
-          onTap: (page) {
-            navigationTapped(page);
-            navigateToPage(
-                context, page); // Navigasi menggunakan Navigator.push
-          },
+          onTap: navigationTapped,
           backgroundColor: white,
           showUnselectedLabels: true,
           selectedFontSize: 12.0,
@@ -131,4 +95,11 @@ class _MenuState extends State<Menu> {
       ),
     );
   }
+
+  final List<Widget> menu = [
+    const Home(),
+    const Home1(),
+    const Home2(),
+    const Home3(),
+  ];
 }
