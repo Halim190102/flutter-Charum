@@ -1,25 +1,38 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:charum/utils/colors.dart';
 import 'package:charum/views/pages/home.dart';
 import 'package:charum/views/pages/home1.dart';
 import 'package:charum/views/pages/home2.dart';
 import 'package:charum/views/pages/home3.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Menu extends StatefulWidget {
+class Menu extends ConsumerStatefulWidget {
   const Menu({Key? key}) : super(key: key);
 
   @override
-  State<Menu> createState() => _MenuState();
+  ConsumerState<Menu> createState() => _MenuState();
 }
 
-class _MenuState extends State<Menu> {
+class _MenuState extends ConsumerState<Menu> {
+  Timer? timer;
+  int refreshTime = 5;
   int _page = 0;
+
   late PageController pageController;
 
   @override
   void initState() {
     super.initState();
     pageController = PageController(initialPage: _page);
+  }
+
+  cancelRefresh() {
+    if (timer != null) {
+      timer!.cancel();
+      print('Fungsi auto refresh dihentikan');
+    }
   }
 
   @override
@@ -32,14 +45,6 @@ class _MenuState extends State<Menu> {
     setState(() {
       _page = page;
     });
-  }
-
-  void navigationTapped(int page) {
-    pageController.animateToPage(
-      page,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.ease,
-    );
   }
 
   @override
@@ -59,7 +64,32 @@ class _MenuState extends State<Menu> {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: greenCharum,
           unselectedItemColor: Colors.grey,
-          onTap: navigationTapped,
+          onTap: (page) {
+            pageController.animateToPage(
+              page,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.ease,
+            );
+            cancelRefresh();
+            timer = Timer(Duration(seconds: refreshTime), () {
+              if (_page != 0) {
+                final refresh = ref.refresh(tabHomeIndexProvider);
+                ref.invalidate(homeBucket);
+                print(refresh);
+
+                print('Auto Refresh 0');
+              }
+              if (_page != 1) {
+                print('Auto Refresh 1');
+              }
+              if (_page != 2) {
+                print('Auto Refresh 2');
+              }
+              if (_page != 3) {
+                print('Auto Refresh 3');
+              }
+            });
+          },
           backgroundColor: white,
           showUnselectedLabels: true,
           selectedFontSize: 12.0,
