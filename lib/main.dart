@@ -1,9 +1,9 @@
-import 'package:charum/views/auth/welcome.dart';
 import 'package:charum/views/pages/menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const ProviderScope(child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
