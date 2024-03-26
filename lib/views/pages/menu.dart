@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:charum/utils/colors.dart';
 import 'package:charum/views/pages/home.dart';
@@ -13,6 +15,8 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  Timer? timer;
+  int refreshTime = 10;
   int _page = 0;
   late PageController pageController;
 
@@ -20,6 +24,30 @@ class _MenuState extends State<Menu> {
   void initState() {
     super.initState();
     pageController = PageController(initialPage: _page);
+  }
+
+  autoRefresh() {
+    timer = Timer(Duration(seconds: refreshTime), () {
+      if (_page != 0) {
+        print('Auto Refresh 0');
+      }
+      if (_page != 1) {
+        print('Auto Refresh 1');
+      }
+      if (_page != 2) {
+        print('Auto Refresh 2');
+      }
+      if (_page != 3) {
+        print('Auto Refresh 3');
+      }
+    });
+  }
+
+  cancelRefresh() {
+    if (timer != null) {
+      timer!.cancel();
+      print('Fungsi auto refresh dihentikan');
+    }
   }
 
   @override
@@ -40,6 +68,8 @@ class _MenuState extends State<Menu> {
       duration: const Duration(milliseconds: 500),
       curve: Curves.ease,
     );
+    cancelRefresh();
+    autoRefresh();
   }
 
   @override
