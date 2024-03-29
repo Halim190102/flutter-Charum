@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:charum/utils/colors.dart';
+import 'package:charum/utils/container.dart';
+import 'package:charum/utils/text.dart';
 import 'package:charum/utils/text_field_input.dart';
-import 'package:charum/views/auth/signin.dart';
-import 'package:charum/views/pages/menu.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -28,71 +28,71 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-          width: double.infinity,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 28,
+          child: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: containerUtils(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              width: double.infinity,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 28,
+                  ),
+                  _text(),
+                  const SizedBox(
+                    height: 42,
+                  ),
+                  _form(),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  _forgotPasswordButton(),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  _loginButton(),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  textUtils(text: "Or sign log in with"),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  SizedBox(
+                      width: 200,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _socialMedia('google'),
+                          _socialMedia('facebook'),
+                          _socialMedia('twitter'),
+                        ],
+                      )),
+                  Flexible(
+                    flex: 2,
+                    child: Container(),
+                  ),
+                  _forSignUpButton()
+                ],
               ),
-              _text(),
-              const SizedBox(
-                height: 42,
-              ),
-              _form(),
-              const SizedBox(
-                height: 16,
-              ),
-              _forgotPasswordButton(),
-              const SizedBox(
-                height: 32,
-              ),
-              _loginButton(),
-              const SizedBox(
-                height: 24,
-              ),
-              const Text("Or sign log in with"),
-              const SizedBox(
-                height: 24,
-              ),
-              SizedBox(
-                  width: 200,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _socialMedia('google'),
-                      _socialMedia('facebook'),
-                      _socialMedia('twitter'),
-                    ],
-                  )),
-              Flexible(
-                flex: 2,
-                child: Container(),
-              ),
-              _forSignUpButton()
-            ],
-          ),
-        ),
-      ),
+            ),
+          )
+        ],
+      )),
     );
   }
 
   _socialMedia(String logo) {
-    return Container(
+    return containerUtils(
       height: 42,
       width: 42,
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: ShapeDecoration(
-        shape: const RoundedRectangleBorder(
-          side: BorderSide(color: Colors.grey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-        color: white,
-      ),
+      borderColor: grey,
+      borderRadius: 10,
+      color: white,
       child: Image.asset(
         'assets/social-media-logo/$logo.png',
       ),
@@ -126,33 +126,31 @@ class _LoginState extends State<Login> {
       onTap: () {},
       child: Align(
         alignment: Alignment.centerRight,
-        child: Text(
-          'Forgot Password ?',
-          style: TextStyle(
-            color: greenCharum,
-            fontWeight: FontWeight.bold,
-          ),
+        child: textUtils(
+          text: 'Forgot Password ?',
+          color: greenCharum,
+          weight: FontWeight.bold,
         ),
       ),
     );
   }
 
   _text() {
-    return const Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Align(
           alignment: Alignment.centerLeft,
-          child: Text(
-            "Welcome back!",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-            ),
+          child: textUtils(
+            text: "Welcome back!",
+            weight: FontWeight.bold,
+            size: 24,
           ),
         ),
-        SizedBox(height: 2),
-        Text(
-          "You’ve been missed. You can sign in first to see any threads you searching for.",
+        const SizedBox(height: 2),
+        textUtils(
+          text:
+              "You’ve been missed. You can sign in first to see any threads you searching for.",
         ),
       ],
     );
@@ -162,31 +160,17 @@ class _LoginState extends State<Login> {
     return InkWell(
       onTap: () {
         _modal();
-        Future.delayed(const Duration(seconds: 2), () {
-          Navigator.of(context).pop();
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => const Menu(),
-            ),
-            (route) => false,
-          );
-        });
+        _homePage();
       },
-      child: Container(
+      child: containerUtils(
         width: double.infinity,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: ShapeDecoration(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          color: greenCharum,
-        ),
-        child: Text(
-          'Log in',
-          style: TextStyle(color: white),
+        borderRadius: 10,
+        color: greenCharum,
+        child: textUtils(
+          text: 'Log in',
+          color: white,
         ),
       ),
     );
@@ -196,23 +180,20 @@ class _LoginState extends State<Login> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: const Text("Don't have an account? "),
+          child: textUtils(text: "Don't have an account? "),
         ),
         GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => const Signin(),
-              ),
-            );
+            Navigator.of(context).pushNamed('/signin');
           },
-          child: Container(
+          child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text(
-              "Sign up here.",
-              style: TextStyle(fontWeight: FontWeight.bold, color: greenCharum),
+            child: textUtils(
+              text: "Sign up here.",
+              weight: FontWeight.bold,
+              color: greenCharum,
             ),
           ),
         )
@@ -226,7 +207,7 @@ class _LoginState extends State<Login> {
       builder: (ctx) => AlertDialog(
         contentPadding: const EdgeInsets.only(bottom: 20),
         backgroundColor: white,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
@@ -235,15 +216,23 @@ class _LoginState extends State<Login> {
           'assets/logo/loading.png',
           width: 120,
         ),
-        content: const Text(
-          "Please wait...",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-          textAlign: TextAlign.center,
+        content: textUtils(
+          text: "Please wait...",
+          weight: FontWeight.bold,
+          size: 18,
+          align: TextAlign.center,
         ),
       ),
     );
+  }
+
+  _homePage() {
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.of(context).pop();
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        '/',
+        (route) => false,
+      );
+    });
   }
 }

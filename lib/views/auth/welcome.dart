@@ -1,5 +1,6 @@
 import 'package:charum/utils/colors.dart';
-import 'package:charum/views/auth/login.dart';
+import 'package:charum/utils/container.dart';
+import 'package:charum/utils/text.dart';
 import 'package:flutter/material.dart';
 
 class Welcome extends StatefulWidget {
@@ -23,7 +24,7 @@ class _WelcomeState extends State<Welcome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: white,
       body: SafeArea(
         child: Center(
           child: CustomScrollView(
@@ -91,20 +92,18 @@ class _WelcomeState extends State<Welcome> {
               SizedBox(
                 height: widget.size.height * .035,
               ),
-              Text(
-                text1[pagePosition],
-                style: TextStyle(
-                  color: greenCharum,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
+              textUtils(
+                text: text1[pagePosition],
+                color: greenCharum,
+                weight: FontWeight.bold,
+                size: 20,
               ),
               SizedBox(
                 height: widget.size.height * .01,
               ),
-              Text(
-                text2[pagePosition],
-                textAlign: TextAlign.center,
+              textUtils(
+                text: text2[pagePosition],
+                align: TextAlign.center,
               ),
             ],
           );
@@ -116,28 +115,37 @@ class _WelcomeState extends State<Welcome> {
   _imageIndicator() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: AnimatedContainer(
+      child: containerUtils(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List<Widget>.generate(3, (index) {
-            return AnimatedContainer(
+            return containerUtils(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
               width: 8,
               height: 8,
-              decoration: BoxDecoration(
-                color: activePage == index ? greenCharum : Colors.black26,
-                shape: BoxShape.circle,
-              ),
+              color: activePage == index ? greenCharum : black26,
+              shape: BoxShape.circle,
             );
           }),
         ),
       ),
     );
   }
+
+  List<String> text1 = [
+    'Search Thread Whatever You Like',
+    'Discover Space Group',
+    'Share Your Experience',
+  ];
+  List<String> text2 = [
+    "Confused and want to talk about something but\ndon't know where to go? You can talk to other\npeople on Charum from anywhere and at any time.",
+    "You no longer need to be confused looking for\nthreads on a particular topic, with Space Group you\ncan search for threads on the topic you want.",
+    "You can gain a lot of insight from existing\ndiscussions using the Charum. What are you\nwaiting for? Come on over and join us!",
+  ];
 
   _bottomButton(BuildContext context) {
     return Padding(
@@ -173,31 +181,25 @@ class _WelcomeState extends State<Welcome> {
           _actionButton(2);
         }
       },
-      child: AnimatedContainer(
+      child: containerUtils(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         width: widget.size.width * .45,
         height: widget.size.height * .07,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: ShapeDecoration(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          color: greenCharum,
-        ),
-        child: const Text(
-          'Next',
-          style: TextStyle(color: Colors.white),
+        borderRadius: 10,
+        color: greenCharum,
+        child: textUtils(
+          text: 'Next',
+          color: white,
         ),
       ),
     );
   }
 
   _skipButton() {
-    return Container(
+    return containerUtils(
       alignment: Alignment.center,
       width: widget.size.width * .4,
       height: widget.size.height * .07,
@@ -212,9 +214,9 @@ class _WelcomeState extends State<Welcome> {
             _actionButton(2);
           }
         },
-        child: Text(
-          'Skip',
-          style: TextStyle(color: greenCharum),
+        child: textUtils(
+          text: 'Skip',
+          color: greenCharum,
         ),
       ),
     );
@@ -233,42 +235,23 @@ class _WelcomeState extends State<Welcome> {
 
   _lastPage(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => const Login(),
-        ),
+      onTap: () => Navigator.of(context).pushNamed(
+        '/login',
       ),
-      child: AnimatedContainer(
+      child: containerUtils(
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOutCubic,
         width: widget.size.width * .9,
         height: widget.size.height * .07,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: ShapeDecoration(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          color: greenCharum,
-        ),
-        child: const Text(
-          'Get Started',
-          style: TextStyle(color: Colors.white),
+        borderRadius: 10,
+        color: greenCharum,
+        child: textUtils(
+          text: 'Get Started',
+          color: white,
         ),
       ),
     );
   }
-
-  List<String> text1 = [
-    'Search Thread Whatever You Like',
-    'Discover Space Group',
-    'Share Your Experience',
-  ];
-  List<String> text2 = [
-    "Confused and want to talk about something but\ndon't know where to go? You can talk to other\npeople on Charum from anywhere and at any time.",
-    "You no longer need to be confused looking for\nthreads on a particular topic, with Space Group you\ncan search for threads on the topic you want.",
-    "You can gain a lot of insight from existing\ndiscussions using the Charum. What are you\nwaiting for? Come on over and join us!",
-  ];
 }

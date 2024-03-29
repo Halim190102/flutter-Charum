@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:charum/views/pages/home/followed.dart';
+import 'package:charum/views/pages/home/popular.dart';
+import 'package:charum/views/pages/home/threads.dart';
 import 'package:flutter/material.dart';
 import 'package:charum/utils/colors.dart';
 import 'package:charum/views/pages/home.dart';
@@ -9,7 +12,7 @@ import 'package:charum/views/pages/home3.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Menu extends ConsumerStatefulWidget {
-  const Menu({Key? key}) : super(key: key);
+  const Menu({super.key});
 
   @override
   ConsumerState<Menu> createState() => _MenuState();
@@ -28,23 +31,10 @@ class _MenuState extends ConsumerState<Menu> {
     pageController = PageController(initialPage: _page);
   }
 
-  cancelRefresh() {
-    if (timer != null) {
-      timer!.cancel();
-      print('Fungsi auto refresh dihentikan');
-    }
-  }
-
   @override
   void dispose() {
     super.dispose();
     pageController.dispose();
-  }
-
-  void onPageChanged(int page) {
-    setState(() {
-      _page = page;
-    });
   }
 
   @override
@@ -63,33 +53,8 @@ class _MenuState extends ConsumerState<Menu> {
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           selectedItemColor: greenCharum,
-          unselectedItemColor: Colors.grey,
-          onTap: (page) {
-            pageController.animateToPage(
-              page,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.ease,
-            );
-            cancelRefresh();
-            timer = Timer(Duration(seconds: refreshTime), () {
-              if (_page != 0) {
-                final refresh = ref.refresh(tabHomeIndexProvider);
-                ref.invalidate(homeBucket);
-                print(refresh);
-
-                print('Auto Refresh 0');
-              }
-              if (_page != 1) {
-                print('Auto Refresh 1');
-              }
-              if (_page != 2) {
-                print('Auto Refresh 2');
-              }
-              if (_page != 3) {
-                print('Auto Refresh 3');
-              }
-            });
-          },
+          unselectedItemColor: grey,
+          onTap: onTap,
           backgroundColor: white,
           showUnselectedLabels: true,
           selectedFontSize: 12.0,
@@ -126,10 +91,51 @@ class _MenuState extends ConsumerState<Menu> {
     );
   }
 
-  final List<Widget> menu = [
-    const Home(),
-    const Home1(),
-    const Home2(),
-    const Home3(),
+  List<Widget> menu = const [
+    Home(),
+    Home1(),
+    Home2(),
+    Home3(),
   ];
+
+  cancelRefresh() {
+    if (timer != null) {
+      timer!.cancel();
+    }
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      _page = page;
+    });
+  }
+
+  void onTap(page) {
+    pageController.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
+    cancelRefresh();
+    timer = Timer(Duration(seconds: refreshTime), () {
+      if (_page != 0) {
+        ref.invalidate(tabHomeIndexProvider);
+        ref.invalidate(popularBucket);
+        ref.invalidate(followedBucket);
+        ref.invalidate(threadsBucket);
+      }
+      if (_page != 1) {
+        ref.invalidate(tabHomeIndexProvider1);
+        ref.invalidate(homeBucket1);
+      }
+      if (_page != 2) {
+        ref.invalidate(tabHomeIndexProvider2);
+        ref.invalidate(homeBucket2);
+      }
+      if (_page != 3) {
+        ref.invalidate(tabHomeIndexProvider3);
+        ref.invalidate(homeBucket3);
+      }
+    });
+  }
 }

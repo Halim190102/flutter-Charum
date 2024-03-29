@@ -25,11 +25,15 @@ class _TextFieldInputState extends State<TextFieldInput> {
   @override
   Widget build(BuildContext context) {
     final inputBorder = OutlineInputBorder(
-        borderSide: Divider.createBorderSide(
-          context,
-        ),
-        borderRadius: BorderRadius.circular(5));
+      borderSide: Divider.createBorderSide(
+        context,
+      ),
+      borderRadius: BorderRadius.circular(
+        5,
+      ),
+    );
     return TextField(
+      enableInteractiveSelection: false,
       controller: widget.textEditingController,
       decoration: InputDecoration(
         fillColor: white,
@@ -40,17 +44,22 @@ class _TextFieldInputState extends State<TextFieldInput> {
         filled: true,
         contentPadding: const EdgeInsets.all(8),
         suffixIcon: widget.isPass
-            ? IconButton(
-                onPressed: () {
+            ? GestureDetector(
+                onLongPress: () {
                   setState(() {
-                    _passwordVisible = !_passwordVisible;
+                    _passwordVisible = false;
                   });
                 },
-                icon: Icon(
+                onLongPressEnd: (_) {
+                  setState(() {
+                    _passwordVisible = true;
+                  });
+                },
+                child: Icon(
                   _passwordVisible
                       ? Icons.visibility_outlined
                       : Icons.visibility_off_outlined,
-                  color: Colors.grey,
+                  color: grey,
                 ),
               )
             : null,

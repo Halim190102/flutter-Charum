@@ -1,8 +1,8 @@
 import 'package:charum/utils/colors.dart';
+import 'package:charum/utils/container.dart';
+import 'package:charum/utils/text.dart';
 import 'package:charum/utils/text_field_input.dart';
-import 'package:charum/views/auth/login.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -36,9 +36,11 @@ class _SigninState extends State<Signin> {
           slivers: [
             SliverFillRemaining(
               hasScrollBody: false,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              child: containerUtils(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 12,
+                ),
                 width: double.infinity,
                 child: Column(
                   children: [
@@ -122,21 +124,21 @@ class _SigninState extends State<Signin> {
   }
 
   _text() {
-    return const Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Align(
           alignment: Alignment.centerLeft,
-          child: Text(
-            "Create new account",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-            ),
+          child: textUtils(
+            text: "Create new account",
+            weight: FontWeight.bold,
+            size: 24,
           ),
         ),
-        SizedBox(height: 2),
-        Text(
-          "Let's make a new account for you to see or create any threads in charum.",
+        const SizedBox(height: 2),
+        textUtils(
+          text:
+              "Let's make a new account for you to see or create any threads in charum.",
         ),
       ],
     );
@@ -147,21 +149,15 @@ class _SigninState extends State<Signin> {
       onTap: () {
         _modal();
       },
-      child: Container(
+      child: containerUtils(
         width: double.infinity,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: ShapeDecoration(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          color: greenCharum,
-        ),
-        child: Text(
-          'Sign up',
-          style: TextStyle(color: white),
+        borderRadius: 10,
+        color: greenCharum,
+        child: textUtils(
+          text: 'Sign up',
+          color: white,
         ),
       ),
     );
@@ -175,7 +171,7 @@ class _SigninState extends State<Signin> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               clipBehavior: Clip.antiAlias,
-              child: Container(
+              child: containerUtils(
                 padding: const EdgeInsets.all(
                   20,
                 ),
@@ -185,20 +181,17 @@ class _SigninState extends State<Signin> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Confirmation",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                    textUtils(
+                      text: "Confirmation",
+                      weight: FontWeight.bold,
+                      size: 18,
                     ),
                     const SizedBox(height: 3),
-                    const Text(
-                      "Are you sure want to register with credentials that you filled in the register column?",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
+                    textUtils(
+                      text:
+                          "Are you sure want to register with credentials that you filled in the register column?",
+                      align: TextAlign.center,
+                      size: 12,
                     ),
                     Flexible(
                       flex: 2,
@@ -213,44 +206,30 @@ class _SigninState extends State<Signin> {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: SizedBox(
-                              child: Text(
-                                "No, I don't",
-                                style: TextStyle(
-                                  color: greenCharum,
-                                  fontSize: 12,
-                                ),
-                              ),
+                            child: textUtils(
+                              text: "No, I don't",
+                              color: greenCharum,
+                              size: 12,
                             ),
                           ),
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (_) => const Login(),
-                              ),
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                              'login',
                               (route) => false,
                             );
                           },
-                          child: Container(
+                          child: containerUtils(
                             width: 105,
                             height: 35,
                             alignment: Alignment.center,
-                            decoration: ShapeDecoration(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              color: greenCharum,
-                            ),
-                            child: Text(
-                              'Yes , I am',
-                              style: TextStyle(
-                                color: white,
-                                fontSize: 12,
-                              ),
+                            borderRadius: 15,
+                            color: greenCharum,
+                            child: textUtils(
+                              text: 'Yes , I am',
+                              color: white,
+                              size: 12,
                             ),
                           ),
                         ),
@@ -266,19 +245,20 @@ class _SigninState extends State<Signin> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: const Text("Have an account? "),
+          child: textUtils(text: "Have an account? "),
         ),
         GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: Container(
+          child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text(
-              "Log in here.",
-              style: TextStyle(fontWeight: FontWeight.bold, color: greenCharum),
+            child: textUtils(
+              text: "Log in here.",
+              weight: FontWeight.bold,
+              color: greenCharum,
             ),
           ),
         )
