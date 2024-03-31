@@ -23,8 +23,6 @@ class _SpaceState extends ConsumerState<Space> {
     _search.dispose();
   }
 
-  String topics = '';
-
   @override
   Widget build(BuildContext context) {
     final PageStorageBucket bucket = ref.watch(spaceBucket);
@@ -59,86 +57,7 @@ class _SpaceState extends ConsumerState<Space> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    showModalBottomSheet(
-                      showDragHandle: true,
-                      isScrollControlled: true,
-                      backgroundColor: white,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return containerUtils(
-                          padding: const EdgeInsets.only(
-                              bottom: 25, left: 25, right: 25),
-                          width: double.infinity,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              textUtils(
-                                  text: "Sort By",
-                                  weight: FontWeight.bold,
-                                  size: 16),
-                              const SizedBox(
-                                height: 28,
-                              ),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Wrap(
-                                  spacing: 10,
-                                  runSpacing: 10,
-                                  children: [
-                                    _sortList('A - Z'),
-                                    _sortList('Z - A'),
-                                    // _sortList('Last Updated'),
-                                    // _sortList('Most Threads'),
-                                    // _sortList('Least Threads'),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 28,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  switch (topics) {
-                                    case 'A - Z':
-                                      ref
-                                          .read(spaceProvider.notifier)
-                                          .sortAscending();
-                                      break;
-                                    case 'Z - A':
-                                      ref
-                                          .read(spaceProvider.notifier)
-                                          .sortDescending();
-                                      break;
-                                    default:
-                                      setState(() {
-                                        topics = '';
-                                      });
-                                  }
-                                  Future.delayed(Duration.zero, () {
-                                    setState(() {
-                                      topics = '';
-                                    });
-                                    Navigator.pop(context);
-                                  });
-                                },
-                                child: containerUtils(
-                                  width: double.infinity,
-                                  alignment: Alignment.center,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 12),
-                                  borderRadius: 10,
-                                  color: greenCharum,
-                                  child: textUtils(
-                                    text: 'Confirm',
-                                    color: white,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    );
+                    _sorting(context);
                   },
                   child: const Icon(Icons.sort),
                 ),
@@ -231,8 +150,98 @@ class _SpaceState extends ConsumerState<Space> {
     );
   }
 
+  _sorting(BuildContext context) {
+    return showModalBottomSheet(
+      showDragHandle: true,
+      isScrollControlled: true,
+      backgroundColor: white,
+      context: context,
+      builder: (BuildContext context) {
+        return const SortingBottomSheet();
+      },
+    );
+  }
+}
+
+class SortingBottomSheet extends ConsumerStatefulWidget {
+  const SortingBottomSheet({super.key});
+
+  @override
+  ConsumerState<SortingBottomSheet> createState() => _SortingBottomSheetState();
+}
+
+class _SortingBottomSheetState extends ConsumerState<SortingBottomSheet> {
+  String topics = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return containerUtils(
+      padding: const EdgeInsets.only(bottom: 25, left: 25, right: 25),
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          textUtils(text: "Sort By", weight: FontWeight.bold, size: 16),
+          const SizedBox(
+            height: 28,
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: [
+                _sortList('A - Z'),
+                _sortList('Z - A'),
+                // _sortList('Last Updated'),
+                // _sortList('Most Threads'),
+                // _sortList('Least Threads'),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 28,
+          ),
+          GestureDetector(
+            onTap: () {
+              switch (topics) {
+                case 'A - Z':
+                  ref.read(spaceProvider.notifier).sortAscending();
+                  break;
+                case 'Z - A':
+                  ref.read(spaceProvider.notifier).sortDescending();
+                  break;
+                default:
+                  setState(() {
+                    topics = '';
+                  });
+              }
+              Future.delayed(Duration.zero, () {
+                setState(() {
+                  topics = '';
+                });
+                Navigator.pop(context);
+              });
+            },
+            child: containerUtils(
+              width: double.infinity,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              borderRadius: 10,
+              color: greenCharum,
+              child: textUtils(
+                text: 'Confirm',
+                color: white,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   _sortList(String title) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         setState(() {
           topics = title;
