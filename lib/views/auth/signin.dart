@@ -78,6 +78,7 @@ class _SigninState extends State<Signin> {
     return Column(
       children: [
         TextFieldInput(
+          radius: false,
           textEditingController: _username,
           isPass: false,
           hintText: 'Username',
@@ -87,6 +88,7 @@ class _SigninState extends State<Signin> {
           height: 24,
         ),
         TextFieldInput(
+          radius: false,
           textEditingController: _name,
           isPass: false,
           hintText: 'Name',
@@ -96,6 +98,7 @@ class _SigninState extends State<Signin> {
           height: 24,
         ),
         TextFieldInput(
+          radius: false,
           textEditingController: _email,
           isPass: false,
           hintText: 'Email',
@@ -105,6 +108,7 @@ class _SigninState extends State<Signin> {
           height: 24,
         ),
         TextFieldInput(
+          radius: false,
           textEditingController: _pass,
           isPass: true,
           hintText: 'Password',
@@ -114,6 +118,7 @@ class _SigninState extends State<Signin> {
           height: 24,
         ),
         TextFieldInput(
+          radius: false,
           textEditingController: _cpass,
           isPass: true,
           hintText: 'Confirm Password',

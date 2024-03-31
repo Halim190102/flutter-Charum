@@ -6,7 +6,7 @@ import 'package:charum/views/pages/home/threads.dart';
 import 'package:flutter/material.dart';
 import 'package:charum/utils/colors.dart';
 import 'package:charum/views/pages/home.dart';
-import 'package:charum/views/pages/home1.dart';
+import 'package:charum/views/pages/space.dart';
 import 'package:charum/views/pages/home2.dart';
 import 'package:charum/views/pages/home3.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -93,7 +93,7 @@ class _MenuState extends ConsumerState<Menu> {
 
   List<Widget> menu = const [
     Home(),
-    Home1(),
+    Space(),
     Home2(),
     Home3(),
   ];
@@ -125,8 +125,7 @@ class _MenuState extends ConsumerState<Menu> {
         ref.invalidate(threadsBucket);
       }
       if (_page != 1) {
-        ref.invalidate(tabHomeIndexProvider1);
-        ref.invalidate(homeBucket1);
+        ref.invalidate(spaceBucket);
       }
       if (_page != 2) {
         ref.invalidate(tabHomeIndexProvider2);

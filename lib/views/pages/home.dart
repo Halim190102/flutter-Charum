@@ -45,10 +45,7 @@ class _HomeState extends ConsumerState<Home>
       appBar: AppBar(
         surfaceTintColor: white,
         bottom: _tabBar(activeTab),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: _logo,
-        ),
+        title: _logo(),
         actions: _trailingButton(context),
       ),
       body: PageView(
@@ -68,6 +65,24 @@ class _HomeState extends ConsumerState<Home>
           ),
         ),
       ),
+    );
+  }
+
+  _logo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 40,
+          child: Image.asset('assets/logo/logo-leading.png'),
+        ),
+        textUtils(
+          text: ' Charum',
+          color: greenCharum,
+          weight: FontWeight.bold,
+          size: 18,
+        )
+      ],
     );
   }
 
@@ -131,19 +146,6 @@ class _HomeState extends ConsumerState<Home>
       ),
     ];
   }
-
-  final List<Widget> _logo = [
-    SizedBox(
-      height: 40,
-      child: Image.asset('assets/logo/logo-leading.png'),
-    ),
-    textUtils(
-      text: ' Charum',
-      color: greenCharum,
-      weight: FontWeight.bold,
-      size: 18,
-    )
-  ];
 
   _onTapTabBar(value) {
     _pageController.animateToPage(

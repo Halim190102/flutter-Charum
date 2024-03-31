@@ -103,6 +103,7 @@ class _LoginState extends State<Login> {
     return Column(
       children: [
         TextFieldInput(
+          radius: false,
           textEditingController: _email,
           isPass: false,
           hintText: 'Email',
@@ -112,6 +113,7 @@ class _LoginState extends State<Login> {
           height: 24,
         ),
         TextFieldInput(
+          radius: false,
           textEditingController: _pass,
           isPass: true,
           hintText: 'Password',

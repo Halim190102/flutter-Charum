@@ -28,6 +28,7 @@ flutter:
     - assets/logo/
     - assets/welcome/
     - assets/social-media-logo/
+    - assets/topics/
 
 flutter_native_splash:
   image: assets/logo/charum-logo.png

@@ -1,4 +1,5 @@
 import 'package:charum/utils/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldInput extends StatefulWidget {
@@ -8,12 +9,14 @@ class TextFieldInput extends StatefulWidget {
     required this.isPass,
     required this.hintText,
     required this.textInputType,
+    required this.radius,
   });
 
   final TextEditingController textEditingController;
   final bool isPass;
   final String hintText;
   final TextInputType textInputType;
+  final bool radius;
 
   @override
   State<TextFieldInput> createState() => _TextFieldInputState();
@@ -29,14 +32,15 @@ class _TextFieldInputState extends State<TextFieldInput> {
         context,
       ),
       borderRadius: BorderRadius.circular(
-        5,
+        widget.radius ? 20 : 5,
       ),
     );
     return TextField(
       enableInteractiveSelection: false,
       controller: widget.textEditingController,
       decoration: InputDecoration(
-        fillColor: white,
+        prefixIcon: widget.radius ? const Icon(CupertinoIcons.search) : null,
+        fillColor: widget.radius ? lightGrey : white,
         hintText: widget.hintText,
         border: inputBorder,
         enabledBorder: inputBorder,
