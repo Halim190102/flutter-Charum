@@ -1,19 +1,25 @@
 import 'package:charum/models/topics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final spaceProvider =
-    StateNotifierProvider<SpacesProvider, List<Topics>>((ref) {
+final spaceProvider = NotifierProvider<SpacesProvider, List<Topics>>(() {
   return SpacesProvider();
 });
 
-class SpacesProvider extends StateNotifier<List<Topics>> {
-  SpacesProvider() : super(spaces);
+class SpacesProvider extends Notifier<List<Topics>> {
+  @override
+  List<Topics> build() {
+    return spaces;
+  }
 
   sortAscending() {
-    state.sort((a, b) => a.topics!.compareTo(b.topics!));
+    var s = [...state];
+    s.sort((a, b) => a.topics!.compareTo(b.topics!));
+    state = s;
   }
 
   sortDescending() {
-    state.sort((a, b) => b.topics!.compareTo(a.topics!));
+    var s = [...state];
+    s.sort((a, b) => b.topics!.compareTo(a.topics!));
+    state = s;
   }
 }

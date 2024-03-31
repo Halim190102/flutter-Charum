@@ -70,6 +70,7 @@ class _SpaceState extends ConsumerState<Space> {
         bucket: bucket,
         key: const PageStorageKey<String>('space'),
         child: Consumer(builder: (context, ref, child) {
+          print("object");
           final topicItems = ref.watch(spaceProvider);
           return GridView.builder(
             itemCount: topicItems.length,
@@ -207,6 +208,7 @@ class _SortingBottomSheetState extends ConsumerState<SortingBottomSheet> {
               switch (topics) {
                 case 'A - Z':
                   ref.read(spaceProvider.notifier).sortAscending();
+                  print("Ascending");
                   break;
                 case 'Z - A':
                   ref.read(spaceProvider.notifier).sortDescending();
