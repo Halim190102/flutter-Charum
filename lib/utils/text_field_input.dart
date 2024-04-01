@@ -3,20 +3,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldInput extends StatefulWidget {
-  const TextFieldInput({
-    super.key,
-    required this.textEditingController,
-    required this.isPass,
-    required this.hintText,
-    required this.textInputType,
-    required this.radius,
-  });
+  const TextFieldInput(
+      {super.key,
+      required this.textEditingController,
+      required this.isPass,
+      required this.hintText,
+      required this.textInputType,
+      required this.radius,
+      this.function,
+      this.delete});
 
   final TextEditingController textEditingController;
   final bool isPass;
   final String hintText;
   final TextInputType textInputType;
   final bool radius;
+  final Function(String)? function;
+  final Function()? delete;
 
   @override
   State<TextFieldInput> createState() => _TextFieldInputState();
@@ -36,6 +39,7 @@ class _TextFieldInputState extends State<TextFieldInput> {
       ),
     );
     return TextField(
+      onChanged: widget.function,
       enableInteractiveSelection: false,
       controller: widget.textEditingController,
       decoration: InputDecoration(
@@ -47,26 +51,34 @@ class _TextFieldInputState extends State<TextFieldInput> {
         focusedBorder: inputBorder,
         filled: true,
         contentPadding: const EdgeInsets.all(8),
-        suffixIcon: widget.isPass
+        suffixIcon: widget.delete != null
             ? GestureDetector(
-                onLongPress: () {
-                  setState(() {
-                    _passwordVisible = false;
-                  });
-                },
-                onLongPressEnd: (_) {
-                  setState(() {
-                    _passwordVisible = true;
-                  });
-                },
+                onTap: widget.delete,
                 child: Icon(
-                  _passwordVisible
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
+                  Icons.close,
                   color: grey,
                 ),
               )
-            : null,
+            : widget.isPass
+                ? GestureDetector(
+                    onLongPress: () {
+                      setState(() {
+                        _passwordVisible = false;
+                      });
+                    },
+                    onLongPressEnd: (_) {
+                      setState(() {
+                        _passwordVisible = true;
+                      });
+                    },
+                    child: Icon(
+                      _passwordVisible
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                      color: grey,
+                    ),
+                  )
+                : null,
       ),
       keyboardType: widget.textInputType,
       obscureText: widget.isPass ? _passwordVisible : false,

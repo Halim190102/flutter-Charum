@@ -24,7 +24,17 @@ class _SpaceState extends ConsumerState<Space> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.read(spaceProvider.notifier).sortMostThreads();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final option = ref.watch(sortOption);
+
     final PageStorageBucket bucket = ref.watch(spaceBucket);
     return Scaffold(
       backgroundColor: lightGrey,
@@ -48,11 +58,18 @@ class _SpaceState extends ConsumerState<Space> {
                   height: 35,
                   width: 300,
                   child: TextFieldInput(
+                    function: (data) {
+                      ref.read(spaceProvider.notifier).search(data, option);
+                    },
                     radius: true,
                     textEditingController: _search,
                     isPass: false,
                     hintText: 'Search space',
                     textInputType: TextInputType.text,
+                    delete: () {
+                      _search.clear();
+                      ref.read(spaceProvider.notifier).search('', option);
+                    },
                   ),
                 ),
                 GestureDetector(
@@ -171,90 +188,116 @@ class SortingBottomSheet extends ConsumerStatefulWidget {
 }
 
 class _SortingBottomSheetState extends ConsumerState<SortingBottomSheet> {
-  String topics = '';
+  String choose = '';
 
   @override
   Widget build(BuildContext context) {
-    return containerUtils(
-      padding: const EdgeInsets.only(bottom: 25, left: 25, right: 25),
-      width: double.infinity,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          textUtils(text: "Sort By", weight: FontWeight.bold, size: 16),
-          const SizedBox(
-            height: 28,
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: [
-                _sortList('A - Z'),
-                _sortList('Z - A'),
-                // _sortList('Last Updated'),
-                // _sortList('Most Threads'),
-                // _sortList('Least Threads'),
-              ],
+    final option = ref.watch(sortOption);
+    final confirm = ref.watch(sortConfirm);
+
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          return;
+        }
+        if (confirm == false) {
+          if (choose != '') {
+            ref.read(sortOption.notifier).state = choose;
+            Navigator.pop(context, true);
+          } else {
+            Navigator.pop(context, true);
+          }
+        }
+      },
+      child: containerUtils(
+        padding: const EdgeInsets.only(bottom: 25, left: 25, right: 25),
+        width: double.infinity,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            textUtils(text: "Sort By", weight: FontWeight.bold, size: 16),
+            const SizedBox(
+              height: 28,
             ),
-          ),
-          const SizedBox(
-            height: 28,
-          ),
-          GestureDetector(
-            onTap: () {
-              switch (topics) {
-                case 'A - Z':
-                  ref.read(spaceProvider.notifier).sortAscending();
-                  break;
-                case 'Z - A':
-                  ref.read(spaceProvider.notifier).sortDescending();
-                  break;
-                default:
-                  setState(() {
-                    topics = '';
-                  });
-              }
-              Future.delayed(Duration.zero, () {
-                setState(() {
-                  topics = '';
-                });
-                Navigator.pop(context);
-              });
-            },
-            child: containerUtils(
-              width: double.infinity,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              borderRadius: 10,
-              color: greenCharum,
-              child: textUtils(
-                text: 'Confirm',
-                color: white,
+            Align(
+              alignment: Alignment.topLeft,
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  _sortList('A - Z', ref),
+                  _sortList('Z - A', ref),
+                  // _sortList('Last Updated',ref),
+                  _sortList('Most Threads', ref),
+                  _sortList('Least Threads', ref),
+                ],
               ),
             ),
-          )
-        ],
+            const SizedBox(
+              height: 28,
+            ),
+            GestureDetector(
+              onTap: () {
+                ref.read(sortConfirm.notifier).state = true;
+                switch (option) {
+                  case 'A - Z':
+                    ref.read(spaceProvider.notifier).sortAscending();
+                    break;
+                  case 'Z - A':
+                    ref.read(spaceProvider.notifier).sortDescending();
+                    break;
+                  case 'Most Threads':
+                    ref.read(spaceProvider.notifier).sortMostThreads();
+                    break;
+                  case 'Least Threads':
+                    ref.read(spaceProvider.notifier).sortLeastThreads();
+                    break;
+                  default:
+                }
+                Future.delayed(Duration.zero, () {
+                  ref.read(sortConfirm.notifier).state = false;
+
+                  Navigator.pop(context);
+                });
+              },
+              child: containerUtils(
+                width: double.infinity,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                borderRadius: 10,
+                color: greenCharum,
+                child: textUtils(
+                  text: 'Confirm',
+                  color: white,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  _sortList(String title) {
+  _sortList(String title, WidgetRef ref) {
+    final option = ref.watch(sortOption);
+
     return InkWell(
       onTap: () {
         setState(() {
-          topics = title;
+          choose = option;
         });
+        ref.read(sortOption.notifier).state = title;
       },
       child: containerUtils(
-        borderColor: topics == title ? blue : grey,
+        borderColor: option == title ? blue : grey,
         borderRadius: 10,
         color: white,
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: textUtils(
           text: title,
-          color: topics == title ? blue : grey,
+          color: option == title ? blue : grey,
+          weight: option == title ? FontWeight.bold : null,
           size: 12,
         ),
       ),
