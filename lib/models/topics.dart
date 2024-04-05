@@ -5,7 +5,7 @@ class Topics {
   Topics({this.topics, this.jumlah, this.image, this.explain});
 }
 
-List<Topics> spaces = [
+List<Topics> spacesList = [
   Topics(
     topics: 'Politic',
     jumlah: 123,

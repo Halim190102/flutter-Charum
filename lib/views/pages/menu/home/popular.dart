@@ -1,21 +1,32 @@
 import 'dart:async';
 
 import 'package:charum/utils/colors.dart';
+import 'package:charum/view_model/home_view_model.dart';
 import 'package:charum/views/pages/contains/contains.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final threadsBucket = StateProvider((ref) => PageStorageBucket());
-
-class Threads extends ConsumerStatefulWidget {
-  const Threads({super.key});
+class Popular extends ConsumerStatefulWidget {
+  const Popular({super.key});
 
   @override
-  ConsumerState<Threads> createState() => _ThreadsState();
+  ConsumerState<Popular> createState() => _PopularState();
 }
 
-class _ThreadsState extends ConsumerState<Threads> {
+class _PopularState extends ConsumerState<Popular> {
   final controller = ScrollController();
+
+  delay(dynamic function) {
+    setState(() {
+      loading = true;
+    });
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        function;
+        loading = false;
+      });
+    });
+  }
 
   @override
   void initState() {
@@ -23,24 +34,9 @@ class _ThreadsState extends ConsumerState<Threads> {
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         if (count <= 10) {
-          setState(() {
-            loading = true;
-          });
-          Timer(const Duration(seconds: 1), () {
-            setState(() {
-              count += 2;
-              loading = false;
-            });
-          });
+          delay(count += 2);
         } else {
-          setState(() {
-            loading = true;
-          });
-          Timer(const Duration(seconds: 1), () {
-            setState(() {
-              loading = false;
-            });
-          });
+          delay(null);
         }
       }
     });
@@ -50,11 +46,11 @@ class _ThreadsState extends ConsumerState<Threads> {
   int count = 2;
   @override
   Widget build(BuildContext context) {
-    final PageStorageBucket bucket = ref.watch(threadsBucket);
+    final PageStorageBucket bucket = ref.watch(popularBucket);
 
     return PageStorage(
       bucket: bucket,
-      key: const PageStorageKey<String>('threads'),
+      key: const PageStorageKey<String>('popular'),
       child: ListView.builder(
         controller: controller,
         itemBuilder: (context, index) {

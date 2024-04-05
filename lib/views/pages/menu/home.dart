@@ -1,13 +1,13 @@
 import 'package:charum/utils/colors.dart';
+import 'package:charum/utils/tab_item.dart';
 import 'package:charum/utils/text.dart';
-import 'package:charum/views/pages/home/followed.dart';
-import 'package:charum/views/pages/home/popular.dart';
-import 'package:charum/views/pages/home/threads.dart';
+import 'package:charum/view_model/home_view_model.dart';
+import 'package:charum/views/pages/menu/home/followed.dart';
+import 'package:charum/views/pages/menu/home/popular.dart';
+import 'package:charum/views/pages/menu/home/threads.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final tabHomeIndexProvider = StateProvider((ref) => 0);
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
@@ -16,23 +16,18 @@ class Home extends ConsumerStatefulWidget {
   ConsumerState<Home> createState() => _HomeState();
 }
 
-class _HomeState extends ConsumerState<Home>
-    with SingleTickerProviderStateMixin {
+class _HomeState extends ConsumerState<Home> {
   late PageController _pageController;
-  late TabController _tabController;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     int initial = ref.watch(tabHomeIndexProvider);
     _pageController = PageController(initialPage: initial);
-    _tabController =
-        TabController(length: pages.length, vsync: this, initialIndex: initial);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
     _pageController.dispose();
     super.dispose();
   }
@@ -44,15 +39,16 @@ class _HomeState extends ConsumerState<Home>
       backgroundColor: lightGrey,
       appBar: AppBar(
         surfaceTintColor: white,
-        bottom: _tabBar(activeTab),
         title: _logo(),
         actions: _trailingButton(context),
       ),
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: _pageController,
-        onPageChanged: _pageViewChange,
-        children: pages,
+      body: tab(
+        activeTab,
+        _listTab(activeTab),
+        MainAxisAlignment.spaceAround,
+        54,
+        const SizedBox(),
+        _content(),
       ),
       floatingActionButton: GestureDetector(
         onTap: () {},
@@ -66,6 +62,50 @@ class _HomeState extends ConsumerState<Home>
         ),
       ),
     );
+  }
+
+  _content() {
+    return Expanded(
+      child: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: _pageController,
+        onPageChanged: _pageViewChange,
+        children: pages,
+      ),
+    );
+  }
+
+  List<Widget> _listTab(int activeTab) {
+    return [
+      tabList(
+        activeTab,
+        0,
+        Icons.article,
+        Icons.article_outlined,
+        ' Threads',
+        _pageController,
+      ),
+      tabList(
+        activeTab,
+        1,
+        Icons.star_outlined,
+        Icons.star_border,
+        ' Popular',
+        _pageController,
+      ),
+      tabList(
+        activeTab,
+        2,
+        Icons.add_chart,
+        Icons.add_chart_outlined,
+        ' Followed',
+        _pageController,
+      ),
+    ];
+  }
+
+  void _pageViewChange(index) {
+    ref.read(tabHomeIndexProvider.notifier).state = index;
   }
 
   _logo() {
@@ -91,21 +131,6 @@ class _HomeState extends ConsumerState<Home>
     Popular(),
     Followed(),
   ];
-
-  _tabBar(int activeTab) {
-    return TabBar(
-      controller: _tabController,
-      onTap: _onTapTabBar,
-      labelColor: greenCharum,
-      indicatorColor: greenCharum,
-      tabs: _tabMethod(activeTab),
-    );
-  }
-
-  _pageViewChange(index) {
-    ref.read(tabHomeIndexProvider.notifier).state = index;
-    _tabController.animateTo(index);
-  }
 
   _trailingButton(BuildContext context) {
     return [
@@ -138,59 +163,14 @@ class _HomeState extends ConsumerState<Home>
         ),
       ),
       IconButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed(
+            '/searching',
+          );
+        },
         icon: const Icon(
           CupertinoIcons.search,
           size: 30,
-        ),
-      ),
-    ];
-  }
-
-  _onTapTabBar(value) {
-    _pageController.animateToPage(
-      value,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.ease,
-    );
-  }
-
-  _tabMethod(int activeTab) {
-    return [
-      Tab(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              activeTab == 0 ? Icons.article : Icons.article_outlined,
-              color: activeTab == 0 ? greenCharum : null,
-            ),
-            textUtils(text: " Threads")
-          ],
-        ),
-      ),
-      Tab(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              activeTab == 1 ? Icons.star_outlined : Icons.star_border,
-              color: activeTab == 1 ? greenCharum : null,
-            ),
-            textUtils(text: " Popular")
-          ],
-        ),
-      ),
-      Tab(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              activeTab == 2 ? Icons.add_chart : Icons.add_chart_outlined,
-              color: activeTab == 2 ? greenCharum : null,
-            ),
-            textUtils(text: " Followed")
-          ],
         ),
       ),
     ];

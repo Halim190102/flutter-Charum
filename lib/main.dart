@@ -2,8 +2,10 @@
 import 'package:charum/views/auth/login.dart';
 import 'package:charum/views/auth/signin.dart';
 import 'package:charum/views/auth/welcome.dart';
-import 'package:charum/views/pages/home/notification.dart';
+import 'package:charum/views/pages/menu/home/notification.dart';
 import 'package:charum/views/pages/menu.dart';
+import 'package:charum/views/pages/menu/home/search.dart';
+import 'package:charum/views/pages/menu/space/space_option.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,8 +29,10 @@ class MainApp extends StatelessWidget {
           '/login': (_) => const Login(),
           '/signin': (_) => const Signin(),
           '/notification': (_) => const Notifications(),
+          '/searching': (_) => const Searching(),
+          '/spaceoption': (_) => const SpaceOptionItem(),
         },
-        initialRoute: '/',
+        initialRoute: '/welcome',
         // home: Welcome(
         //   size: size,
         // ),

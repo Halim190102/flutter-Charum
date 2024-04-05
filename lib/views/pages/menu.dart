@@ -1,14 +1,15 @@
 import 'dart:async';
 
-import 'package:charum/views/pages/home/followed.dart';
-import 'package:charum/views/pages/home/popular.dart';
-import 'package:charum/views/pages/home/threads.dart';
-import 'package:flutter/material.dart';
 import 'package:charum/utils/colors.dart';
-import 'package:charum/views/pages/home.dart';
-import 'package:charum/views/pages/space.dart';
-import 'package:charum/views/pages/home2.dart';
-import 'package:charum/views/pages/home3.dart';
+import 'package:charum/utils/const.dart';
+import 'package:charum/view_model/bookmark_view_model.dart';
+import 'package:charum/view_model/home_view_model.dart';
+import 'package:charum/view_model/space_view_model.dart';
+import 'package:charum/views/pages/menu/home.dart';
+import 'package:charum/views/pages/menu/bookmark.dart';
+import 'package:charum/views/pages/menu/home3.dart';
+import 'package:charum/views/pages/menu/space.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Menu extends ConsumerStatefulWidget {
@@ -27,6 +28,9 @@ class _MenuState extends ConsumerState<Menu> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.read(spaceProvider.notifier).sortAscending();
+    });
     super.initState();
     pageController = PageController(initialPage: _page);
   }
@@ -49,7 +53,7 @@ class _MenuState extends ConsumerState<Menu> {
         ),
       ),
       bottomNavigationBar: SizedBox(
-        height: 70,
+        height: 65,
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           selectedItemColor: greenCharum,
@@ -94,7 +98,7 @@ class _MenuState extends ConsumerState<Menu> {
   List<Widget> menu = const [
     Home(),
     Space(),
-    Home2(),
+    Bookmark(),
     Home3(),
   ];
 
@@ -113,7 +117,7 @@ class _MenuState extends ConsumerState<Menu> {
   void onTap(page) {
     pageController.animateToPage(
       page,
-      duration: const Duration(milliseconds: 500),
+      duration: Duration(milliseconds: time),
       curve: Curves.ease,
     );
     cancelRefresh();
@@ -128,8 +132,7 @@ class _MenuState extends ConsumerState<Menu> {
         ref.invalidate(spaceBucket);
       }
       if (_page != 2) {
-        ref.invalidate(tabHomeIndexProvider2);
-        ref.invalidate(homeBucket2);
+        ref.invalidate(bookmarkBucket);
       }
       if (_page != 3) {
         ref.invalidate(tabHomeIndexProvider3);

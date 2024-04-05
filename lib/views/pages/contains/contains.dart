@@ -1,5 +1,6 @@
 import 'package:charum/utils/colors.dart';
 import 'package:charum/utils/container.dart';
+import 'package:charum/utils/snackbar.dart';
 import 'package:charum/utils/text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +107,7 @@ class _ItemListState extends State<ItemList> {
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Image.asset(
-            'assets/logo/12313.png',
+            'assets/logo/new-icon.jpg',
           ),
         ),
         const SizedBox(
@@ -233,7 +234,9 @@ class _ItemListState extends State<ItemList> {
                     ),
                   ],
                 ),
-                onTap: () {},
+                onTap: () {
+                  showSnackBarFun(context);
+                },
               ),
               GestureDetector(
                 child: Wrap(

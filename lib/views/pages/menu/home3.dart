@@ -104,12 +104,12 @@ class Home3 extends ConsumerWidget {
         body: PageStorage(
           bucket: bucket,
           child: ListView.builder(
-            key: PageStorageKey<String>('home'),
+            key: const PageStorageKey<String>('home'),
             itemBuilder: (context, index) {
               return Container(
                 width: double.infinity,
                 height: 40,
-                margin: EdgeInsets.all(12),
+                margin: const EdgeInsets.all(12),
                 color: Colors.green,
               );
             },

@@ -1,4 +1,5 @@
 import 'package:charum/utils/colors.dart';
+import 'package:charum/utils/const.dart';
 import 'package:charum/utils/container.dart';
 import 'package:charum/utils/text.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +34,9 @@ class _WelcomeState extends State<Welcome> {
                 hasScrollBody: false,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                      vertical: widget.size.height * .025,
-                      horizontal: widget.size.width * .05),
+                    vertical: widget.size.height * .025,
+                    horizontal: widget.size.width * .05,
+                  ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -116,13 +118,13 @@ class _WelcomeState extends State<Welcome> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: containerUtils(
-        duration: const Duration(milliseconds: 300),
+        duration: Duration(milliseconds: time),
         curve: Curves.easeInOut,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List<Widget>.generate(3, (index) {
             return containerUtils(
-              duration: const Duration(milliseconds: 300),
+              duration: Duration(milliseconds: time),
               curve: Curves.easeInOut,
               margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
               width: 8,
@@ -151,7 +153,7 @@ class _WelcomeState extends State<Welcome> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: AnimatedCrossFade(
-        duration: const Duration(milliseconds: 300),
+        duration: Duration(milliseconds: time),
         crossFadeState: activePage == 2
             ? CrossFadeState.showFirst
             : CrossFadeState.showSecond,
@@ -182,7 +184,7 @@ class _WelcomeState extends State<Welcome> {
         }
       },
       child: containerUtils(
-        duration: const Duration(milliseconds: 300),
+        duration: Duration(milliseconds: time),
         curve: Curves.easeInOut,
         width: widget.size.width * .45,
         height: widget.size.height * .07,
@@ -225,7 +227,7 @@ class _WelcomeState extends State<Welcome> {
   _actionButton(int page) {
     _pageController.animateToPage(
       page,
-      duration: const Duration(milliseconds: 500),
+      duration: Duration(milliseconds: time),
       curve: Curves.ease,
     );
     setState(() {
@@ -239,7 +241,7 @@ class _WelcomeState extends State<Welcome> {
         '/login',
       ),
       child: containerUtils(
-        duration: const Duration(milliseconds: 500),
+        duration: Duration(milliseconds: time),
         curve: Curves.easeInOutCubic,
         width: widget.size.width * .9,
         height: widget.size.height * .07,
