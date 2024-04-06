@@ -8,6 +8,10 @@ final sortOption = StateProvider((ref) => 'A - Z');
 
 final sortConfirm = StateProvider((ref) => false);
 
+final sthreadsBucket = StateProvider((ref) => PageStorageBucket());
+
+final spopularBucket = StateProvider((ref) => PageStorageBucket());
+
 final spaceProvider =
     StateNotifierProvider<SpacesProvider, List<Topics>>((ref) {
   return SpacesProvider();

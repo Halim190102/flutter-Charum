@@ -19,4 +19,4 @@ String kelipatan3(int angka) {
   return hasil;
 }
 
-int time = 300;
+int time = 750;

@@ -2,19 +2,20 @@ import 'package:charum/models/topics.dart';
 import 'package:charum/utils/colors.dart';
 import 'package:charum/utils/tab_item.dart';
 import 'package:charum/utils/text.dart';
-import 'package:charum/views/pages/menu/home/popular.dart';
-import 'package:charum/views/pages/menu/home/threads.dart';
+import 'package:charum/view_model/space_view_model.dart';
+import 'package:charum/views/pages/contains/content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SpaceOptionItem extends StatefulWidget {
+class SpaceOptionItem extends ConsumerStatefulWidget {
   const SpaceOptionItem({super.key});
 
   @override
-  State<SpaceOptionItem> createState() => _SpaceOptionItemState();
+  ConsumerState<SpaceOptionItem> createState() => _SpaceOptionItemState();
 }
 
-class _SpaceOptionItemState extends State<SpaceOptionItem> {
+class _SpaceOptionItemState extends ConsumerState<SpaceOptionItem> {
   late PageController _pageController;
 
   int tabInitial = 0;
@@ -34,31 +35,53 @@ class _SpaceOptionItemState extends State<SpaceOptionItem> {
   @override
   Widget build(BuildContext context) {
     final topics = ModalRoute.of(context)!.settings.arguments as Topics;
-    return Scaffold(
-      backgroundColor: lightGrey,
-      appBar: AppBar(
-        toolbarHeight: 30,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(
-                '/searching',
-              );
-            },
-            icon: const Icon(
-              CupertinoIcons.search,
-              size: 30,
+    final threads = ref.watch(sthreadsBucket);
+    final popular = ref.watch(spopularBucket);
+
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        if (didPop) {
+          ref.invalidate(sthreadsBucket);
+          ref.invalidate(spopularBucket);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: lightGrey,
+        appBar: AppBar(
+          toolbarHeight: 30,
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  '/searching',
+                );
+              },
+              icon: const Icon(
+                CupertinoIcons.search,
+                size: 30,
+              ),
+            ),
+          ],
+        ),
+        body: tab(
+          tabInitial,
+          _listTab(),
+          MainAxisAlignment.start,
+          170,
+          _leadingText(topics),
+          Expanded(
+            child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: _pageController,
+              onPageChanged: _pageViewChange,
+              children: [
+                Content(bucket: threads, keys: 'sthreads'),
+                Content(bucket: popular, keys: 'spopular'),
+              ],
             ),
           ),
-        ],
-      ),
-      body: tab(
-        tabInitial,
-        _listTab(),
-        MainAxisAlignment.start,
-        170,
-        _leadingText(topics),
-        _content(),
+        ),
       ),
     );
   }
@@ -82,17 +105,6 @@ class _SpaceOptionItemState extends State<SpaceOptionItem> {
         _pageController,
       ),
     ];
-  }
-
-  _content() {
-    return Expanded(
-      child: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: _pageController,
-        onPageChanged: _pageViewChange,
-        children: pages,
-      ),
-    );
   }
 
   _leadingText(Topics topics) {
@@ -122,9 +134,4 @@ class _SpaceOptionItemState extends State<SpaceOptionItem> {
       tabInitial = index;
     });
   }
-
-  List<Widget> pages = const [
-    Threads(),
-    Popular(),
-  ];
 }

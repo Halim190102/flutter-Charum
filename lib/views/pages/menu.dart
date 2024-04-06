@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:charum/utils/colors.dart';
-import 'package:charum/utils/const.dart';
 import 'package:charum/view_model/bookmark_view_model.dart';
 import 'package:charum/view_model/home_view_model.dart';
 import 'package:charum/view_model/space_view_model.dart';
@@ -115,18 +114,16 @@ class _MenuState extends ConsumerState<Menu> {
   }
 
   void onTap(page) {
-    pageController.animateToPage(
+    pageController.jumpToPage(
       page,
-      duration: Duration(milliseconds: time),
-      curve: Curves.ease,
     );
     cancelRefresh();
     timer = Timer(Duration(seconds: refreshTime), () {
       if (_page != 0) {
         ref.invalidate(tabHomeIndexProvider);
-        ref.invalidate(popularBucket);
-        ref.invalidate(followedBucket);
-        ref.invalidate(threadsBucket);
+        ref.invalidate(hpopularBucket);
+        ref.invalidate(hfollowedBucket);
+        ref.invalidate(hthreadsBucket);
       }
       if (_page != 1) {
         ref.invalidate(spaceBucket);

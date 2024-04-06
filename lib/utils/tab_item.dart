@@ -38,10 +38,8 @@ tabList(int initialTab, int activeTab, IconData icon1, IconData icon2,
     String text, PageController pageController) {
   return GestureDetector(
     onTap: () {
-      pageController.animateToPage(
+      pageController.jumpToPage(
         activeTab,
-        duration: Duration(milliseconds: time),
-        curve: Curves.ease,
       );
     },
     child: containerUtils(

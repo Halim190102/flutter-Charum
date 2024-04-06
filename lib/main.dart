@@ -32,7 +32,7 @@ class MainApp extends StatelessWidget {
           '/searching': (_) => const Searching(),
           '/spaceoption': (_) => const SpaceOptionItem(),
         },
-        initialRoute: '/welcome',
+        initialRoute: '/',
         // home: Welcome(
         //   size: size,
         // ),

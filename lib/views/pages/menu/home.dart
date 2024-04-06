@@ -2,9 +2,7 @@ import 'package:charum/utils/colors.dart';
 import 'package:charum/utils/tab_item.dart';
 import 'package:charum/utils/text.dart';
 import 'package:charum/view_model/home_view_model.dart';
-import 'package:charum/views/pages/menu/home/followed.dart';
-import 'package:charum/views/pages/menu/home/popular.dart';
-import 'package:charum/views/pages/menu/home/threads.dart';
+import 'package:charum/views/pages/contains/content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,6 +33,10 @@ class _HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     final activeTab = ref.watch(tabHomeIndexProvider);
+    final PageStorageBucket followed = ref.watch(hfollowedBucket);
+    final PageStorageBucket threads = ref.watch(hthreadsBucket);
+    final PageStorageBucket popular = ref.watch(hpopularBucket);
+
     return Scaffold(
       backgroundColor: lightGrey,
       appBar: AppBar(
@@ -48,7 +50,7 @@ class _HomeState extends ConsumerState<Home> {
         MainAxisAlignment.spaceAround,
         54,
         const SizedBox(),
-        _content(),
+        _content(threads, popular, followed),
       ),
       floatingActionButton: GestureDetector(
         onTap: () {},
@@ -64,15 +66,25 @@ class _HomeState extends ConsumerState<Home> {
     );
   }
 
-  _content() {
+  _content(PageStorageBucket threads, PageStorageBucket popular,
+      PageStorageBucket followed) {
     return Expanded(
       child: PageView(
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         controller: _pageController,
         onPageChanged: _pageViewChange,
-        children: pages,
+        children: _pages(threads, popular, followed),
       ),
     );
+  }
+
+  List<Widget> _pages(PageStorageBucket threads, PageStorageBucket popular,
+      PageStorageBucket followed) {
+    return [
+      Content(bucket: threads, keys: 'hthreads'),
+      Content(bucket: popular, keys: 'hpopular'),
+      Content(bucket: followed, keys: 'hfollowed'),
+    ];
   }
 
   List<Widget> _listTab(int activeTab) {
@@ -125,12 +137,6 @@ class _HomeState extends ConsumerState<Home> {
       ],
     );
   }
-
-  List<Widget> pages = const [
-    Threads(),
-    Popular(),
-    Followed(),
-  ];
 
   _trailingButton(BuildContext context) {
     return [

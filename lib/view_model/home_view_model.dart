@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final tabHomeIndexProvider = StateProvider((ref) => 0);
 
-final followedBucket = StateProvider((ref) => PageStorageBucket());
+final hfollowedBucket = StateProvider((ref) => PageStorageBucket());
 
-final popularBucket = StateProvider((ref) => PageStorageBucket());
+final hpopularBucket = StateProvider((ref) => PageStorageBucket());
 
-final threadsBucket = StateProvider((ref) => PageStorageBucket());
+final hthreadsBucket = StateProvider((ref) => PageStorageBucket());

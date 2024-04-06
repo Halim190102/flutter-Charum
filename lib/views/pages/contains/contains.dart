@@ -104,10 +104,14 @@ class _ItemListState extends State<ItemList> {
         const SizedBox(
           height: 8,
         ),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Image.asset(
-            'assets/logo/new-icon.jpg',
+        SizedBox(
+          width: double.infinity,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image.asset(
+              'assets/logo/12313.png',
+              fit: BoxFit.contain,
+            ),
           ),
         ),
         const SizedBox(
