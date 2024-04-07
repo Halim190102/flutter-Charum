@@ -47,66 +47,74 @@ class _SpaceState extends ConsumerState<Space> {
           weight: FontWeight.w700,
           size: 22,
         ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(45),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  height: 35,
-                  width: 300,
-                  child: TextFieldInput(
-                    function: (data) {
-                      ref.read(spaceProvider.notifier).search(data, option);
-                    },
-                    radius: true,
-                    textEditingController: _search,
-                    isPass: false,
-                    hintText: 'Search space',
-                    textInputType: TextInputType.text,
-                    delete: () {
-                      _search.clear();
-                      ref.read(spaceProvider.notifier).search('', option);
-                    },
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _sorting(context);
-                  },
-                  child: const Icon(Icons.sort),
-                ),
-              ],
-            ),
-          ),
+        bottom: _bottomSearchSort(option, context),
+      ),
+      body: _body(bucket, topicItems),
+    );
+  }
+
+  _body(PageStorageBucket bucket, List<Topics> topicItems) {
+    return PageStorage(
+      bucket: bucket,
+      key: const PageStorageKey<String>('space'),
+      child: GridView.builder(
+        itemCount: topicItems.length,
+        padding: const EdgeInsets.all(12),
+        itemBuilder: (context, index) {
+          final spaceOfTopic = topicItems[index];
+          return InkWell(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  '/spaceoption',
+                  arguments: spaceOfTopic,
+                );
+              },
+              child: _listOfGridView(spaceOfTopic));
+        },
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 2 / 3,
         ),
       ),
-      body: PageStorage(
-        bucket: bucket,
-        key: const PageStorageKey<String>('space'),
-        child: GridView.builder(
-          itemCount: topicItems.length,
-          padding: const EdgeInsets.all(12),
-          itemBuilder: (context, index) {
-            final spaceOfTopic = topicItems[index];
-            return InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/spaceoption',
-                    arguments: spaceOfTopic,
-                  );
+    );
+  }
+
+  _bottomSearchSort(String option, BuildContext context) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(45),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              height: 35,
+              width: 300,
+              child: TextFieldInput(
+                function: (data) {
+                  ref.read(spaceProvider.notifier).search(data, option);
                 },
-                child: _listOfGridView(spaceOfTopic));
-          },
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 2 / 3,
-          ),
+                radius: true,
+                textEditingController: _search,
+                isPass: false,
+                hintText: 'Search space',
+                textInputType: TextInputType.text,
+                delete: () {
+                  _search.clear();
+                  ref.read(spaceProvider.notifier).search('', option);
+                },
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                _sorting(context);
+              },
+              child: const Icon(Icons.sort),
+            ),
+          ],
         ),
       ),
     );

@@ -3,7 +3,7 @@ import 'package:charum/utils/colors.dart';
 import 'package:charum/utils/tab_item.dart';
 import 'package:charum/utils/text.dart';
 import 'package:charum/view_model/space_view_model.dart';
-import 'package:charum/views/pages/contains/content.dart';
+import 'package:charum/views/pages/contains/widget_component_page_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,8 +76,8 @@ class _SpaceOptionItemState extends ConsumerState<SpaceOptionItem> {
               controller: _pageController,
               onPageChanged: _pageViewChange,
               children: [
-                Content(bucket: threads, keys: 'sthreads'),
-                Content(bucket: popular, keys: 'spopular'),
+                WidgetComponentPageStorage(bucket: threads, keys: 'sthreads'),
+                WidgetComponentPageStorage(bucket: popular, keys: 'spopular'),
               ],
             ),
           ),

@@ -2,7 +2,7 @@ import 'package:charum/utils/colors.dart';
 import 'package:charum/utils/tab_item.dart';
 import 'package:charum/utils/text.dart';
 import 'package:charum/view_model/home_view_model.dart';
-import 'package:charum/views/pages/contains/content.dart';
+import 'package:charum/views/pages/contains/widget_component_page_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -81,9 +81,9 @@ class _HomeState extends ConsumerState<Home> {
   List<Widget> _pages(PageStorageBucket threads, PageStorageBucket popular,
       PageStorageBucket followed) {
     return [
-      Content(bucket: threads, keys: 'hthreads'),
-      Content(bucket: popular, keys: 'hpopular'),
-      Content(bucket: followed, keys: 'hfollowed'),
+      WidgetComponentPageStorage(bucket: threads, keys: 'hthreads'),
+      WidgetComponentPageStorage(bucket: popular, keys: 'hpopular'),
+      WidgetComponentPageStorage(bucket: followed, keys: 'hfollowed'),
     ];
   }
 

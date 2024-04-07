@@ -5,8 +5,8 @@ import 'package:charum/views/pages/contains/contains.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Content extends ConsumerStatefulWidget {
-  const Content({
+class WidgetComponentPageStorage extends ConsumerStatefulWidget {
+  const WidgetComponentPageStorage({
     super.key,
     required this.bucket,
     required this.keys,
@@ -15,10 +15,12 @@ class Content extends ConsumerStatefulWidget {
   final String keys;
 
   @override
-  ConsumerState<Content> createState() => _ContentState();
+  ConsumerState<WidgetComponentPageStorage> createState() =>
+      _WidgetComponentPageStorageState();
 }
 
-class _ContentState extends ConsumerState<Content> {
+class _WidgetComponentPageStorageState
+    extends ConsumerState<WidgetComponentPageStorage> {
   final controller = ScrollController();
 
   delay(dynamic function) {
