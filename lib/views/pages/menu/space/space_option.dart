@@ -49,7 +49,6 @@ class _SpaceOptionItemState extends ConsumerState<SpaceOptionItem> {
       child: Scaffold(
         backgroundColor: lightGrey,
         appBar: AppBar(
-          toolbarHeight: 30,
           actions: [
             IconButton(
               onPressed: () {
@@ -65,12 +64,12 @@ class _SpaceOptionItemState extends ConsumerState<SpaceOptionItem> {
           ],
         ),
         body: tab(
-          tabInitial,
-          _listTab(),
-          MainAxisAlignment.start,
-          170,
-          _leadingText(topics),
-          Expanded(
+          activeTab: tabInitial,
+          widget: _listTab(),
+          main: MainAxisAlignment.start,
+          height: 180,
+          widgetList: _leadingText(topics),
+          content: Expanded(
             child: PageView(
               physics: const NeverScrollableScrollPhysics(),
               controller: _pageController,
@@ -124,6 +123,9 @@ class _SpaceOptionItemState extends ConsumerState<SpaceOptionItem> {
           text: topics.explain!,
           size: 12,
           align: TextAlign.justify,
+        ),
+        const SizedBox(
+          height: 6,
         ),
       ],
     );

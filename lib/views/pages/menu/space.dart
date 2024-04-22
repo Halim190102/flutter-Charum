@@ -76,7 +76,7 @@ class _SpaceState extends ConsumerState<Space> {
           crossAxisCount: 2,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
-          childAspectRatio: 2 / 3,
+          childAspectRatio: 2 / 3.1,
         ),
       ),
     );
@@ -92,7 +92,7 @@ class _SpaceState extends ConsumerState<Space> {
           children: [
             SizedBox(
               height: 35,
-              width: 300,
+              width: 250,
               child: TextFieldInput(
                 function: (data) {
                   ref.read(spaceProvider.notifier).search(data, option);
@@ -169,7 +169,7 @@ class _SpaceState extends ConsumerState<Space> {
                   color: lightGrey,
                   borderRadius: 10,
                   child: textUtils(
-                    text: kelipatan3(spaceOfTopic.jumlah!),
+                    text: kelipatan3(spaceOfTopic.jumlah!, true),
                     color: grey,
                     size: 12,
                     weight: FontWeight.bold,

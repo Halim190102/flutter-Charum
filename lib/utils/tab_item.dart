@@ -4,33 +4,36 @@ import 'package:charum/utils/container.dart';
 import 'package:charum/utils/text.dart';
 import 'package:flutter/material.dart';
 
-tab(
-  int activeTab,
-  List<Widget> widget,
-  MainAxisAlignment main,
-  double height,
+tab({
+  required int activeTab,
+  required List<Widget> widget,
+  required MainAxisAlignment main,
+  CrossAxisAlignment? cross,
+  double? height,
   Widget? widgetList,
-  Widget? content,
-) {
-  return Column(children: [
+  required Widget content,
+}) {
+  return Column(mainAxisSize: MainAxisSize.min, children: [
     containerUtils(
       height: height,
       color: white,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.only(bottom: 12, left: 12, right: 12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: cross ?? CrossAxisAlignment.start,
         children: [
-          widgetList!,
-          Row(
-            mainAxisAlignment: main,
-            children: widget,
+          widgetList ?? const SizedBox(),
+          Container(
+            margin: const EdgeInsets.only(top: 12),
+            child: Row(
+              mainAxisAlignment: main,
+              children: widget,
+            ),
           ),
         ],
       ),
     ),
-    content!
+    content
   ]);
 }
 
@@ -47,7 +50,7 @@ tabList(int initialTab, int activeTab, IconData icon1, IconData icon2,
       curve: Curves.easeOutSine,
       borderRadius: 8,
       color: initialTab == activeTab ? lightGreen : null,
-      width: 110,
+      width: 105,
       height: 30,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

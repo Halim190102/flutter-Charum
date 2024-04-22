@@ -61,18 +61,22 @@ class _BookmarkState extends ConsumerState<Bookmark> {
           children: [
             SizedBox(
               height: 35,
-              width: MediaQuery.of(context).size.width - 30,
+              width: 250,
               child: TextFieldInput(
                 function: (data) {},
                 radius: true,
                 textEditingController: _search,
                 isPass: false,
-                hintText: 'Search space',
+                hintText: 'Search bookmark',
                 textInputType: TextInputType.text,
                 delete: () {
                   _search.clear();
                 },
               ),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: const Icon(Icons.sort),
             ),
           ],
         ),

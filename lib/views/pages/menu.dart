@@ -6,7 +6,7 @@ import 'package:charum/view_model/home_view_model.dart';
 import 'package:charum/view_model/space_view_model.dart';
 import 'package:charum/views/pages/menu/home.dart';
 import 'package:charum/views/pages/menu/bookmark.dart';
-import 'package:charum/views/pages/menu/home3.dart';
+import 'package:charum/views/pages/menu/account.dart';
 import 'package:charum/views/pages/menu/space.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,7 +57,9 @@ class _MenuState extends ConsumerState<Menu> {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: greenCharum,
           unselectedItemColor: grey,
-          onTap: onTap,
+          onTap: (page) {
+            onTap(page, ref);
+          },
           backgroundColor: white,
           showUnselectedLabels: true,
           selectedFontSize: 12.0,
@@ -98,7 +100,7 @@ class _MenuState extends ConsumerState<Menu> {
     Home(),
     Space(),
     Bookmark(),
-    Home3(),
+    Account(),
   ];
 
   cancelRefresh() {
@@ -113,7 +115,7 @@ class _MenuState extends ConsumerState<Menu> {
     });
   }
 
-  void onTap(page) {
+  void onTap(int page, WidgetRef ref) {
     pageController.jumpToPage(
       page,
     );
@@ -132,8 +134,7 @@ class _MenuState extends ConsumerState<Menu> {
         ref.invalidate(bookmarkBucket);
       }
       if (_page != 3) {
-        ref.invalidate(tabHomeIndexProvider3);
-        ref.invalidate(homeBucket3);
+        ref.invalidate(athreadsBucket);
       }
     });
   }

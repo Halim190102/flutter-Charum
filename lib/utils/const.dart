@@ -1,4 +1,4 @@
-String kelipatan3(int angka) {
+String kelipatan3(int angka, bool option) {
   String angkaString = angka.toString();
   String hasil = '';
   int counter = 0;
@@ -11,12 +11,16 @@ String kelipatan3(int angka) {
       counter = 0;
     }
   }
-  if (angka <= 1) {
-    hasil += ' thread';
+  if (option) {
+    if (angka <= 1) {
+      hasil += ' thread';
+    } else {
+      hasil += ' threads';
+    }
+    return hasil;
   } else {
-    hasil += ' threads';
+    return hasil;
   }
-  return hasil;
 }
 
 int time = 750;

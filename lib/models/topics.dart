@@ -80,7 +80,7 @@ List<Topics> spacesList = [
   ),
   Topics(
     topics: 'Art',
-    jumlah: 121,
+    jumlah: 123355555,
     image: 'art',
     explain:
         "Through beautiful and inspiring works, art allows us to understand, appreciate and express life in a unique and profound way.",

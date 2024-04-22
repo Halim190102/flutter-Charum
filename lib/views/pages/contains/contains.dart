@@ -19,11 +19,12 @@ class _ItemListState extends State<ItemList> {
   Widget build(BuildContext context) {
     return containerUtils(
       padding: const EdgeInsets.all(15),
+      borderRadius: 8,
       width: double.infinity,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      borderRadius: 8,
       color: white,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _heading(),
           const SizedBox(
@@ -40,40 +41,41 @@ class _ItemListState extends State<ItemList> {
   }
 
   _action() {
-    return Row(
-      children: [
-        Row(
-          children: [
-            Icon(
-              CupertinoIcons.hand_thumbsup,
-              size: 20,
-              color: grey,
-            ),
-            textUtils(
-              text: ' 10,919',
-              size: 13,
-              color: grey,
-            ),
-          ],
-        ),
-        const SizedBox(
-          width: 12,
-        ),
-        Row(
-          children: [
-            Icon(
-              Icons.comment_outlined,
-              size: 20,
-              color: grey,
-            ),
-            textUtils(
-              text: ' 1,919',
-              size: 13,
-              color: grey,
-            ),
-          ],
-        )
-      ],
+    return SizedBox(
+      width: 150,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(
+                CupertinoIcons.hand_thumbsup,
+                size: 20,
+                color: grey,
+              ),
+              textUtils(
+                text: ' 10,919',
+                size: 13,
+                color: grey,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.comment_outlined,
+                size: 20,
+                color: grey,
+              ),
+              textUtils(
+                text: ' 1,919',
+                size: 13,
+                color: grey,
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 
@@ -95,6 +97,20 @@ class _ItemListState extends State<ItemList> {
         const SizedBox(
           height: 8,
         ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/full');
+          },
+          child: _onContainTap(),
+        ),
+      ],
+    );
+  }
+
+  _onContainTap() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         textUtils(
           text:
               'Why is Indonesia the only member of G20 from Southeast Asia if some country is better (Malaysia or Singapore)?',
@@ -105,9 +121,8 @@ class _ItemListState extends State<ItemList> {
           height: 8,
         ),
         SizedBox(
-          width: double.infinity,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
+          height: 200,
+          child: Center(
             child: Image.asset(
               'assets/logo/12313.png',
               fit: BoxFit.contain,

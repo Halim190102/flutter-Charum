@@ -2,6 +2,7 @@
 import 'package:charum/views/auth/login.dart';
 import 'package:charum/views/auth/signin.dart';
 import 'package:charum/views/auth/welcome.dart';
+import 'package:charum/views/pages/contains/full_contains.dart';
 import 'package:charum/views/pages/menu/home/notification.dart';
 import 'package:charum/views/pages/menu.dart';
 import 'package:charum/views/pages/menu/home/search.dart';
@@ -31,6 +32,7 @@ class MainApp extends StatelessWidget {
           '/notification': (_) => const Notifications(),
           '/searching': (_) => const Searching(),
           '/spaceoption': (_) => const SpaceOptionItem(),
+          '/full': (_) => const FullContains(),
         },
         initialRoute: '/',
         // home: Welcome(

@@ -33,24 +33,21 @@ class _HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     final activeTab = ref.watch(tabHomeIndexProvider);
-    final PageStorageBucket followed = ref.watch(hfollowedBucket);
-    final PageStorageBucket threads = ref.watch(hthreadsBucket);
-    final PageStorageBucket popular = ref.watch(hpopularBucket);
+    final followed = ref.watch(hfollowedBucket);
+    final threads = ref.watch(hthreadsBucket);
+    final popular = ref.watch(hpopularBucket);
 
     return Scaffold(
       backgroundColor: lightGrey,
       appBar: AppBar(
-        surfaceTintColor: white,
         title: _logo(),
         actions: _trailingButton(context),
       ),
       body: tab(
-        activeTab,
-        _listTab(activeTab),
-        MainAxisAlignment.spaceAround,
-        54,
-        const SizedBox(),
-        _content(threads, popular, followed),
+        activeTab: activeTab,
+        widget: _listTab(activeTab),
+        main: MainAxisAlignment.spaceAround,
+        content: _content(threads, popular, followed),
       ),
       floatingActionButton: GestureDetector(
         onTap: () {},
