@@ -24,3 +24,4 @@ String kelipatan3(int angka, bool option) {
 }
 
 int time = 750;
+int refreshTime = 2;

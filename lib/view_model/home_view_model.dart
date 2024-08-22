@@ -8,3 +8,10 @@ final hfollowedBucket = StateProvider((ref) => PageStorageBucket());
 final hpopularBucket = StateProvider((ref) => PageStorageBucket());
 
 final hthreadsBucket = StateProvider((ref) => PageStorageBucket());
+
+functionState(WidgetRef ref) {
+  ref.invalidate(tabHomeIndexProvider);
+  ref.invalidate(hpopularBucket);
+  ref.invalidate(hfollowedBucket);
+  ref.invalidate(hthreadsBucket);
+}

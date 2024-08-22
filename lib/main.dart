@@ -1,8 +1,8 @@
-// import 'package:charum/views/pages/menu.dart';
 import 'package:charum/views/auth/login.dart';
 import 'package:charum/views/auth/signin.dart';
 import 'package:charum/views/auth/welcome.dart';
 import 'package:charum/views/pages/contains/full_contains.dart';
+import 'package:charum/views/pages/landing.dart';
 import 'package:charum/views/pages/menu/home/notification.dart';
 import 'package:charum/views/pages/menu.dart';
 import 'package:charum/views/pages/menu/home/search.dart';
@@ -14,19 +14,23 @@ void main() {
   runApp(const ProviderScope(child: MainApp()));
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: {
-          '/': (_) => const Menu(),
-          '/welcome': (_) => Welcome(size: size),
+          '/menu': (_) => const Menu(),
+          '/welcome': (_) => const Welcome(),
           '/login': (_) => const Login(),
           '/signin': (_) => const Signin(),
           '/notification': (_) => const Notifications(),
@@ -34,11 +38,7 @@ class MainApp extends StatelessWidget {
           '/spaceoption': (_) => const SpaceOptionItem(),
           '/full': (_) => const FullContains(),
         },
-        initialRoute: '/',
-        // home: Welcome(
-        //   size: size,
-        // ),
-        // // home: Menu(),
+        home: const Landing(),
       ),
     );
   }

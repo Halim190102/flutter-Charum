@@ -254,7 +254,27 @@ class _ItemListState extends State<ItemList> {
                   ],
                 ),
                 onTap: () {
-                  showSnackBarFun(context);
+                  showSnackBarFun(
+                    context,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 10,
+                          backgroundColor: white,
+                          child: Icon(
+                            Icons.done_rounded,
+                            color: greenCharum,
+                            size: 16,
+                          ),
+                        ),
+                        textUtils(
+                          text: '  Thread added to your Bookmarks',
+                          size: 12,
+                        )
+                      ],
+                    ),
+                  );
                 },
               ),
               GestureDetector(

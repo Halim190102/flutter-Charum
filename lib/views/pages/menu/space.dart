@@ -16,24 +16,9 @@ class Space extends ConsumerStatefulWidget {
 }
 
 class _SpaceState extends ConsumerState<Space> {
-  late TextEditingController _search;
-
-  @override
-  void dispose() {
-    super.dispose();
-    _search.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _search = TextEditingController();
-  }
-
   @override
   Widget build(BuildContext context) {
     final option = ref.watch(sortOption);
-    final topicItems = ref.watch(spaceProvider);
 
     final PageStorageBucket bucket = ref.watch(spaceBucket);
     return Scaffold(
@@ -49,11 +34,13 @@ class _SpaceState extends ConsumerState<Space> {
         ),
         bottom: _bottomSearchSort(option, context),
       ),
-      body: _body(bucket, topicItems),
+      body: _body(bucket),
     );
   }
 
-  _body(PageStorageBucket bucket, List<Topics> topicItems) {
+  _body(PageStorageBucket bucket) {
+    final topicItems = ref.watch(spaceProvider);
+
     return PageStorage(
       bucket: bucket,
       key: const PageStorageKey<String>('space'),
@@ -63,14 +50,15 @@ class _SpaceState extends ConsumerState<Space> {
         itemBuilder: (context, index) {
           final spaceOfTopic = topicItems[index];
           return InkWell(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  '/spaceoption',
-                  arguments: spaceOfTopic,
-                );
-              },
-              child: _listOfGridView(spaceOfTopic));
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                '/spaceoption',
+                arguments: spaceOfTopic,
+              );
+            },
+            child: _listOfGridView(spaceOfTopic),
+          );
         },
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -83,6 +71,7 @@ class _SpaceState extends ConsumerState<Space> {
   }
 
   _bottomSearchSort(String option, BuildContext context) {
+    final search = ref.watch(searchings);
     return PreferredSize(
       preferredSize: const Size.fromHeight(45),
       child: Padding(
@@ -98,12 +87,12 @@ class _SpaceState extends ConsumerState<Space> {
                   ref.read(spaceProvider.notifier).search(data, option);
                 },
                 radius: true,
-                textEditingController: _search,
+                textEditingController: search,
                 isPass: false,
                 hintText: 'Search space',
                 textInputType: TextInputType.text,
                 delete: () {
-                  _search.clear();
+                  search.clear();
                   ref.read(spaceProvider.notifier).search('', option);
                 },
               ),

@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:charum/utils/colors.dart';
+import 'package:charum/utils/const.dart';
+import 'package:charum/view_model/account_view_model.dart';
+import 'package:charum/view_model/auth_view_model.dart';
 import 'package:charum/view_model/bookmark_view_model.dart';
 import 'package:charum/view_model/home_view_model.dart';
 import 'package:charum/view_model/space_view_model.dart';
@@ -20,23 +23,30 @@ class Menu extends ConsumerStatefulWidget {
 
 class _MenuState extends ConsumerState<Menu> {
   Timer? timer;
-  int refreshTime = 5;
   int _page = 0;
 
   late PageController pageController;
 
+  void _fetchDataUser() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(authProvider.notifier).getDataUser(context: context);
+    });
+  }
+
   @override
   void initState() {
+    super.initState();
+    _fetchDataUser();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(spaceProvider.notifier).sortAscending();
     });
-    super.initState();
     pageController = PageController(initialPage: _page);
   }
 
   @override
   void dispose() {
     super.dispose();
+    cancelRefresh();
     pageController.dispose();
   }
 
@@ -48,7 +58,12 @@ class _MenuState extends ConsumerState<Menu> {
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           onPageChanged: onPageChanged,
-          children: menu,
+          children: const <Widget>[
+            Home(),
+            Space(),
+            Bookmark(),
+            Account(),
+          ],
         ),
       ),
       bottomNavigationBar: SizedBox(
@@ -57,9 +72,7 @@ class _MenuState extends ConsumerState<Menu> {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: greenCharum,
           unselectedItemColor: grey,
-          onTap: (page) {
-            onTap(page, ref);
-          },
+          onTap: onTap,
           backgroundColor: white,
           showUnselectedLabels: true,
           selectedFontSize: 12.0,
@@ -96,12 +109,7 @@ class _MenuState extends ConsumerState<Menu> {
     );
   }
 
-  List<Widget> menu = const [
-    Home(),
-    Space(),
-    Bookmark(),
-    Account(),
-  ];
+  List<Widget> menu = const [];
 
   cancelRefresh() {
     if (timer != null) {
@@ -115,17 +123,17 @@ class _MenuState extends ConsumerState<Menu> {
     });
   }
 
-  void onTap(int page, WidgetRef ref) {
+  void onTap(page) {
     pageController.jumpToPage(
       page,
     );
+    if (_page != 1) {
+      ref.invalidate(searchings);
+    }
     cancelRefresh();
-    timer = Timer(Duration(seconds: refreshTime), () {
+    timer = Timer(Duration(hours: refreshTime), () {
       if (_page != 0) {
-        ref.invalidate(tabHomeIndexProvider);
-        ref.invalidate(hpopularBucket);
-        ref.invalidate(hfollowedBucket);
-        ref.invalidate(hthreadsBucket);
+        functionState(ref);
       }
       if (_page != 1) {
         ref.invalidate(spaceBucket);

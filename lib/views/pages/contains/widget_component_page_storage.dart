@@ -27,7 +27,7 @@ class _WidgetComponentPageStorageState
     setState(() {
       loading = true;
     });
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 10), () {
       setState(() {
         function;
         loading = false;
@@ -40,8 +40,8 @@ class _WidgetComponentPageStorageState
     super.initState();
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
-        if (count <= 10) {
-          delay(count += 2);
+        if (count <= 80) {
+          delay(count += 4);
         } else {
           delay(null);
         }
@@ -50,7 +50,7 @@ class _WidgetComponentPageStorageState
   }
 
   bool loading = false;
-  int count = 2;
+  int count = 4;
   @override
   Widget build(BuildContext context) {
     return PageStorage(

@@ -1,4 +1,5 @@
 import 'package:charum/utils/colors.dart';
+import 'package:charum/utils/logic_data.dart';
 import 'package:charum/utils/tab_item.dart';
 import 'package:charum/utils/text.dart';
 import 'package:charum/view_model/home_view_model.dart';

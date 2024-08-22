@@ -3,15 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldInput extends StatefulWidget {
-  const TextFieldInput(
-      {super.key,
-      required this.textEditingController,
-      required this.isPass,
-      required this.hintText,
-      required this.textInputType,
-      required this.radius,
-      this.function,
-      this.delete});
+  const TextFieldInput({
+    super.key,
+    required this.textEditingController,
+    required this.isPass,
+    required this.hintText,
+    required this.textInputType,
+    required this.radius,
+    this.function,
+    this.delete,
+    this.valid,
+  });
 
   final TextEditingController textEditingController;
   final bool isPass;
@@ -20,6 +22,7 @@ class TextFieldInput extends StatefulWidget {
   final bool radius;
   final Function(String)? function;
   final Function()? delete;
+  final String? Function(String?)? valid;
 
   @override
   State<TextFieldInput> createState() => _TextFieldInputState();
@@ -27,6 +30,7 @@ class TextFieldInput extends StatefulWidget {
 
 class _TextFieldInputState extends State<TextFieldInput> {
   bool _passwordVisible = true;
+  bool submit = true;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +42,19 @@ class _TextFieldInputState extends State<TextFieldInput> {
         widget.radius ? 20 : 5,
       ),
     );
-    return TextField(
-      onChanged: widget.function,
+    return TextFormField(
+      validator: widget.valid,
+      autovalidateMode: widget.valid != null
+          ? submit
+              ? AutovalidateMode.onUserInteraction
+              : AutovalidateMode.disabled
+          : null,
+      onChanged: (e) {
+        setState(() {
+          !submit;
+        });
+        widget.function;
+      },
       enableInteractiveSelection: false,
       controller: widget.textEditingController,
       decoration: InputDecoration(

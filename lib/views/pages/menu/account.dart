@@ -1,17 +1,20 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:charum/api/api.dart';
+import 'package:charum/models/user.dart';
 import 'package:charum/utils/colors.dart';
 import 'package:charum/utils/const.dart';
 import 'package:charum/utils/container.dart';
+import 'package:charum/utils/loading.dart';
 import 'package:charum/utils/tab_item.dart';
 import 'package:charum/utils/text.dart';
+import 'package:charum/view_model/account_view_model.dart';
+import 'package:charum/view_model/auth_view_model.dart';
 import 'package:charum/view_model/bookmark_view_model.dart';
 import 'package:charum/view_model/home_view_model.dart';
 import 'package:charum/view_model/space_view_model.dart';
 import 'package:charum/views/pages/contains/widget_component_page_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final athreadsBucket = StateProvider((ref) => PageStorageBucket());
 
 class Account extends ConsumerStatefulWidget {
   const Account({super.key});
@@ -26,7 +29,6 @@ class _AccountState extends ConsumerState<Account> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     _pageController = PageController(initialPage: tabInitial);
   }
 
@@ -52,16 +54,16 @@ class _AccountState extends ConsumerState<Account> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/login', (route) => false).then((value) {
-                ref.invalidate(tabHomeIndexProvider);
-                ref.invalidate(hpopularBucket);
-                ref.invalidate(hfollowedBucket);
-                ref.invalidate(hthreadsBucket);
+            onPressed: () async {
+              modal(context);
+              await Future.delayed(Duration.zero, () async {
+                functionState(ref);
                 ref.invalidate(spaceBucket);
                 ref.invalidate(bookmarkBucket);
                 ref.invalidate(athreadsBucket);
+                await ref
+                    .read(authProvider.notifier)
+                    .authLogout(context: context);
               });
             },
             icon: const Icon(
@@ -139,23 +141,52 @@ class _AccountState extends ConsumerState<Account> {
   }
 
   _leadingText() {
+    Data? user = ref.watch(authProvider).data;
     return Column(
       children: [
-        CircleAvatar(
-          radius: 32,
-          child: Image.asset(
-            'assets/logo/avatar.png',
+        GestureDetector(
+          onTap: () {
+            final image = user?.profilepict;
+            if (image != '') {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => FullImage(image: image!)));
+            }
+          },
+          child: CachedNetworkImage(
+            imageBuilder: (context, imageProvider) => CircleAvatar(
+              radius: 45,
+              backgroundImage: imageProvider,
+            ),
+            imageUrl: '$url/uploads/profile/${user?.profilepict ?? ''}',
+            placeholder: (context, url) => CircleAvatar(
+              backgroundColor: grey,
+              radius: 45,
+              child: Icon(
+                Icons.person,
+                color: white,
+                size: 60,
+              ),
+            ),
+            errorWidget: (context, url, error) => CircleAvatar(
+              backgroundColor: grey,
+              radius: 45,
+              child: Icon(
+                Icons.error,
+                color: white,
+                size: 60,
+              ),
+            ),
           ),
         ),
         const SizedBox(
           height: 6,
         ),
         textUtils(
-          text: 'Ade Winda',
+          text: user?.name ?? '',
           weight: FontWeight.bold,
         ),
         textUtils(
-          text: 'adewinda00',
+          text: user?.username ?? '',
           size: 12,
           color: grey,
         ),
@@ -220,7 +251,7 @@ class _AccountState extends ConsumerState<Account> {
         1,
         Icons.info,
         Icons.info_outline,
-        ' Popular',
+        ' About',
         _pageController,
       ),
     ];
@@ -230,5 +261,37 @@ class _AccountState extends ConsumerState<Account> {
     setState(() {
       tabInitial = index;
     });
+  }
+}
+
+class FullImage extends StatefulWidget {
+  const FullImage({super.key, required this.image});
+  final String? image;
+
+  @override
+  State<FullImage> createState() => _FullImageState();
+}
+
+class _FullImageState extends State<FullImage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: CachedNetworkImage(
+          imageUrl: '$url/uploads/profile/${widget.image ?? ''}',
+          placeholder: (context, url) => Icon(
+            Icons.person,
+            color: white,
+            size: 60,
+          ),
+          errorWidget: (context, url, error) => const Icon(
+            Icons.error,
+            size: 60,
+          ),
+          httpHeaders: const {'Connection': "Kepp-Alive"},
+        ),
+      ),
+    );
   }
 }

@@ -5,8 +5,7 @@ import 'package:charum/utils/text.dart';
 import 'package:flutter/material.dart';
 
 class Welcome extends StatefulWidget {
-  const Welcome({super.key, required this.size});
-  final Size size;
+  const Welcome({super.key, e});
 
   @override
   State<Welcome> createState() => _WelcomeState();
@@ -24,6 +23,8 @@ class _WelcomeState extends State<Welcome> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: white,
       body: SafeArea(
@@ -34,25 +35,25 @@ class _WelcomeState extends State<Welcome> {
                 hasScrollBody: false,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    vertical: widget.size.height * .025,
-                    horizontal: widget.size.width * .05,
+                    vertical: size.height * .025,
+                    horizontal: size.width * .05,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: widget.size.height * .025,
+                        height: size.height * .025,
                       ),
-                      _imageSlider(),
+                      _imageSlider(size),
                       Flexible(
                         flex: 2,
                         child: Container(),
                       ),
                       _imageIndicator(),
                       SizedBox(
-                        height: widget.size.height * .03,
+                        height: size.height * .03,
                       ),
-                      _bottomButton(context),
+                      _bottomButton(context, size),
                     ],
                   ),
                 ),
@@ -64,9 +65,9 @@ class _WelcomeState extends State<Welcome> {
     );
   }
 
-  _imageSlider() {
+  _imageSlider(Size size) {
     return SizedBox(
-      height: widget.size.height * 0.7,
+      height: size.height * 0.7,
       child: PageView.builder(
         // physics: const NeverScrollableScrollPhysics(),
         itemCount: 3,
@@ -92,7 +93,7 @@ class _WelcomeState extends State<Welcome> {
                 ],
               ),
               SizedBox(
-                height: widget.size.height * .035,
+                height: size.height * .035,
               ),
               textUtils(
                 text: text1[pagePosition],
@@ -101,7 +102,7 @@ class _WelcomeState extends State<Welcome> {
                 size: 20,
               ),
               SizedBox(
-                height: widget.size.height * .01,
+                height: size.height * .01,
               ),
               textUtils(
                 text: text2[pagePosition],
@@ -149,7 +150,7 @@ class _WelcomeState extends State<Welcome> {
     "You can gain a lot of insight from existing\ndiscussions using the Charum. What are you\nwaiting for? Come on over and join us!",
   ];
 
-  _bottomButton(BuildContext context) {
+  _bottomButton(BuildContext context, Size size) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: AnimatedCrossFade(
@@ -157,24 +158,24 @@ class _WelcomeState extends State<Welcome> {
         crossFadeState: activePage == 2
             ? CrossFadeState.showFirst
             : CrossFadeState.showSecond,
-        firstChild: _lastPage(context),
-        secondChild: _previousPage(),
+        firstChild: _lastPage(context, size),
+        secondChild: _previousPage(size),
       ),
     );
   }
 
-  _previousPage() {
+  _previousPage(Size size) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _skipButton(),
-        _nextButton(),
+        _skipButton(size),
+        _nextButton(size),
       ],
     );
   }
 
-  _nextButton() {
+  _nextButton(Size size) {
     return GestureDetector(
       onTap: () {
         if (activePage == 0) {
@@ -186,8 +187,8 @@ class _WelcomeState extends State<Welcome> {
       child: containerUtils(
         duration: Duration(milliseconds: time),
         curve: Curves.easeInOut,
-        width: widget.size.width * .45,
-        height: widget.size.height * .07,
+        width: size.width * .45,
+        height: size.height * .07,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(vertical: 12),
         borderRadius: 10,
@@ -200,22 +201,22 @@ class _WelcomeState extends State<Welcome> {
     );
   }
 
-  _skipButton() {
-    return containerUtils(
-      alignment: Alignment.center,
-      width: widget.size.width * .4,
-      height: widget.size.height * .07,
-      child: TextButton(
-        onPressed: () {
-          if (activePage == 0) {
-            _pageController.jumpToPage(2);
-            setState(() {
-              activePage = 2;
-            });
-          } else {
-            _actionButton(2);
-          }
-        },
+  _skipButton(Size size) {
+    return GestureDetector(
+      onTap: () {
+        if (activePage == 0) {
+          _pageController.jumpToPage(2);
+          setState(() {
+            activePage = 2;
+          });
+        } else {
+          _actionButton(2);
+        }
+      },
+      child: containerUtils(
+        alignment: Alignment.center,
+        width: size.width * .4,
+        height: size.height * .07,
         child: textUtils(
           text: 'Skip',
           color: greenCharum,
@@ -235,7 +236,7 @@ class _WelcomeState extends State<Welcome> {
     });
   }
 
-  _lastPage(BuildContext context) {
+  _lastPage(BuildContext context, Size size) {
     return GestureDetector(
       onTap: () => Navigator.of(context).pushNamed(
         '/login',
@@ -243,8 +244,8 @@ class _WelcomeState extends State<Welcome> {
       child: containerUtils(
         duration: Duration(milliseconds: time),
         curve: Curves.easeInOutCubic,
-        width: widget.size.width * .9,
-        height: widget.size.height * .07,
+        width: size.width * .9,
+        height: size.height * .07,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(vertical: 12),
         borderRadius: 10,

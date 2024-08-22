@@ -12,6 +12,8 @@ final sthreadsBucket = StateProvider((ref) => PageStorageBucket());
 
 final spopularBucket = StateProvider((ref) => PageStorageBucket());
 
+final searchings = StateProvider((ref) => TextEditingController());
+
 final spaceProvider =
     StateNotifierProvider<SpacesProvider, List<Topics>>((ref) {
   return SpacesProvider();
